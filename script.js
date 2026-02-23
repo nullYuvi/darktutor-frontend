@@ -1,20 +1,20 @@
 const API = "https://darktutor.onrender.com";
 
-// elements
 const msg = document.getElementById("msg");
+const card = document.getElementById("card");
 
-// ================= SIGNUP =================
+// ---------- SIGNUP ----------
 async function signupUser() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) {
-    msg.innerText = "Username & password required ❌";
-    return;
-  }
+  msg.innerText = "Signing up...";
 
   try {
-    msg.innerText = "Signing up...";
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+      msg.innerText = "All fields required";
+      return;
+    }
 
     const res = await fetch(API + "/signup", {
       method: "POST",
@@ -23,25 +23,25 @@ async function signupUser() {
     });
 
     const data = await res.json();
-    msg.innerText = data.message;
+    msg.innerText = data.message || "Signup error";
 
-  } catch (e) {
+  } catch (err) {
     msg.innerText = "Server not reachable ❌";
   }
 }
 
-// ================= LOGIN =================
+// ---------- LOGIN ----------
 async function loginUser() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) {
-    msg.innerText = "Username & password required ❌";
-    return;
-  }
+  msg.innerText = "Logging in...";
 
   try {
-    msg.innerText = "Logging in...";
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+      msg.innerText = "All fields required";
+      return;
+    }
 
     const res = await fetch(API + "/login", {
       method: "POST",
@@ -56,22 +56,40 @@ async function loginUser() {
       return;
     }
 
-    // 🔐 save session
+    // SAVE TOKEN
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
 
-    // 👉 REDIRECT (IMPORTANT PART)
-    window.location.href = "dashboard.html";
+    showDashboard();
 
-  } catch (e) {
+  } catch (err) {
     msg.innerText = "Server not reachable ❌";
   }
 }
 
-// ================= AUTO LOGIN =================
-(function autoLogin() {
-  const token = localStorage.getItem("token");
-  if (token && window.location.pathname.endsWith("index.html")) {
-    window.location.href = "dashboard.html";
+// ---------- DASHBOARD ----------
+function showDashboard() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+
+  card.innerHTML = `
+    <h2>Welcome, ${user.username} 👋</h2>
+    <p>Role: ${user.role}</p>
+    <p>Chat Score: ${user.chatScore}</p>
+    <p>Premium: ${user.isPremium ? "Yes" : "No"}</p>
+    <button onclick="logout()">Logout</button>
+  `;
+}
+
+// ---------- LOGOUT ----------
+function logout() {
+  localStorage.clear();
+  location.reload();
+}
+
+// ---------- AUTO LOGIN ----------
+window.onload = () => {
+  if (localStorage.getItem("token")) {
+    showDashboard();
   }
-})();
+};
