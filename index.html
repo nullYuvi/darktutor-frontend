@@ -12,18 +12,33 @@
     <span></span><span></span><span></span><span></span><span></span>
   </div>
 
-  <!-- Main card -->
-  <div class="card" id="card">
-    <h1>Dark<span>Tutor</span></h1>
-    <p>Learn • Hack • Secure</p>
+  <!-- App Card -->
+  <div class="card" id="app">
 
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
+    <!-- AUTH VIEW -->
+    <div id="authView">
+      <h1>Dark<span>Tutor</span></h1>
+      <p>Learn • Hack • Secure</p>
 
-    <button onclick="loginUser()">Login</button>
-    <button class="outline" onclick="signupUser()">Signup</button>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
 
-    <p id="msg"></p>
+      <button onclick="loginUser()">Login</button>
+      <button class="outline" onclick="signupUser()">Signup</button>
+
+      <p id="msg"></p>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboardView" style="display:none;">
+      <h2 id="welcome"></h2>
+
+      <h3>All Users</h3>
+      <div id="usersList"></div>
+
+      <button class="outline" onclick="logout()">Logout</button>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
