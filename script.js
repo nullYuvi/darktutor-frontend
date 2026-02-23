@@ -1,27 +1,71 @@
 const API = "https://darktutor.onrender.com";
 
-// Signup
-async function signup(username, password) {
+const msg = document.getElementById("msg");
+
+// ---------- SIGNUP ----------
+async function signupUser() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
   const res = await fetch(API + "/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password })
   });
-  return res.json();
+
+  const data = await res.json();
+  msg.innerText = data.message || "Signup error";
 }
 
-// Login
-async function login(username, password) {
+// ---------- LOGIN ----------
+async function loginUser() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
   const res = await fetch(API + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password })
   });
-  return res.json();
+
+  const data = await res.json();
+
+  if (data.success) {
+    // 🔐 SAVE TOKEN
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    msg.innerText = "Login successful ✅";
+    showProfile();
+  } else {
+    msg.innerText = data.message || "Login failed ❌";
+  }
 }
 
-// Example test (temporary)
-(async () => {
-  const result = await login("testuser", "12345");
-  console.log(result);
-})();
+// ---------- AUTO LOGIN ----------
+function showProfile() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+
+  document.querySelector(".card").innerHTML = `
+    <h2>Welcome, ${user.username} 👋</h2>
+    <p>Role: ${user.role}</p>
+    <p>ChatScore: ${user.chatScore}</p>
+    <button onclick="logout()">Logout</button>
+  `;
+}
+
+// ---------- LOGOUT ----------
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  location.reload();
+}
+
+// ---------- ON PAGE LOAD ----------
+window.onload = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    showProfile();
+  }
+};
