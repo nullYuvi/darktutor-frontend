@@ -22,7 +22,7 @@ body {
   border: 2px solid #ffd400;
   border-radius: 50%;
   animation: orbit 10s linear infinite;
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .space span:nth-child(1) { top: 10%; left: 20%; animation-duration: 14s; }
@@ -40,49 +40,63 @@ body {
 .card {
   position: relative;
   z-index: 10;
-  width: 300px;
-  padding: 25px;
+  width: 320px;
+  padding: 26px;
   border: 1px solid #ffd400;
-  border-radius: 12px;
-  background: rgba(0,0,0,0.8);
-  box-shadow: 0 0 25px #ffd400;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 25px rgba(255, 212, 0, 0.8);
   text-align: center;
 }
 
+/* Title */
 .card h1 {
   color: white;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .card h1 span {
   color: #ffd400;
 }
 
+/* Subtitle */
 .card p {
   color: #aaa;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  font-size: 14px;
 }
 
+/* Inputs */
 .card input {
   width: 100%;
-  padding: 10px;
+  padding: 11px;
   margin-bottom: 12px;
   background: black;
   border: 1px solid #ffd400;
   color: white;
-  border-radius: 6px;
+  border-radius: 7px;
+  outline: none;
 }
 
+.card input:focus {
+  box-shadow: 0 0 8px #ffd400;
+}
+
+/* Buttons */
 .card button {
   width: 100%;
-  padding: 10px;
+  padding: 11px;
   margin-top: 10px;
   background: #ffd400;
   border: none;
   color: black;
   font-weight: bold;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
+}
+
+.card button:hover {
+  box-shadow: 0 0 12px #ffd400;
 }
 
 .card button.outline {
@@ -91,6 +105,19 @@ body {
   border: 1px solid #ffd400;
 }
 
-.card button:hover {
-  box-shadow: 0 0 10px #ffd400;
+/* Message text */
+#msg {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #ffd400;
 }
+
+/* Dashboard text */
+.card h2 {
+  color: #ffd400;
+  margin-bottom: 12px;
+}
+
+.card p {
+  margin-bottom: 8px;
+  }
