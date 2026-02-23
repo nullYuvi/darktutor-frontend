@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: black;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🌌 Space animation */
+.space span {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 2px solid #ffd400;
+  border-radius: 50%;
+  animation: orbit 10s linear infinite;
+  opacity: 0.4;
+}
+
+.space span:nth-child(1) { top: 10%; left: 20%; animation-duration: 14s; }
+.space span:nth-child(2) { top: 60%; left: 10%; animation-duration: 18s; }
+.space span:nth-child(3) { top: 30%; left: 70%; animation-duration: 12s; }
+.space span:nth-child(4) { top: 80%; left: 60%; animation-duration: 20s; }
+.space span:nth-child(5) { top: 40%; left: 40%; animation-duration: 16s; }
+
+@keyframes orbit {
+  0% { transform: rotate(0deg) scale(0.8); }
+  100% { transform: rotate(360deg) scale(1.2); }
+}
+
+/* 🟨 Login Card */
+.card {
+  position: relative;
+  z-index: 10;
+  width: 300px;
+  padding: 25px;
+  border: 1px solid #ffd400;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.8);
+  box-shadow: 0 0 25px #ffd400;
+  text-align: center;
+}
+
+.card h1 {
+  color: white;
+  margin-bottom: 5px;
+}
+
+.card h1 span {
+  color: #ffd400;
+}
+
+.card p {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.card input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  background: black;
+  border: 1px solid #ffd400;
+  color: white;
+  border-radius: 6px;
+}
+
+.card button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #ffd400;
+  border: none;
+  color: black;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.card button.outline {
+  background: transparent;
+  color: #ffd400;
+  border: 1px solid #ffd400;
+}
+
+.card button:hover {
+  box-shadow: 0 0 10px #ffd400;
+}
