@@ -21,12 +21,19 @@
     <h1>Dark<span>Tutor</span></h1>
     <p>Learn • Hack • Secure</p>
 
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
+    <!-- 🔹 INPUTS (IDs added) -->
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
 
-    <button>Login</button>
-    <button class="outline">Signup</button>
+    <!-- 🔹 BUTTONS -->
+    <button onclick="loginUser()">Login</button>
+    <button class="outline" onclick="signupUser()">Signup</button>
+
+    <!-- 🔹 MESSAGE -->
+    <p id="msg" style="margin-top:10px;color:#ffd400;"></p>
   </div>
 
+  <!-- 🔹 JS CONNECT -->
+  <script src="script.js"></script>
 </body>
 </html>
