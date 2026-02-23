@@ -9,31 +9,23 @@
 
   <!-- Animated background -->
   <div class="space">
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span><span></span><span></span>
   </div>
 
   <!-- Main card -->
-  <div class="card">
+  <div class="card" id="card">
     <h1>Dark<span>Tutor</span></h1>
     <p>Learn • Hack • Secure</p>
 
-    <!-- 🔹 INPUTS (IDs added) -->
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
 
-    <!-- 🔹 BUTTONS -->
     <button onclick="loginUser()">Login</button>
     <button class="outline" onclick="signupUser()">Signup</button>
 
-    <!-- 🔹 MESSAGE -->
-    <p id="msg" style="margin-top:10px;color:#ffd400;"></p>
+    <p id="msg"></p>
   </div>
 
-  <!-- 🔹 JS CONNECT -->
   <script src="script.js"></script>
 </body>
 </html>
