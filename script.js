@@ -77,10 +77,10 @@ async function fetchUsers() {
 
   try {
     const token = localStorage.getItem("token");
+    const me = JSON.parse(localStorage.getItem("user"));
+
     const res = await fetch(API + "/users", {
-      headers: {
-        Authorization: "Bearer " + token
-      }
+      headers: { Authorization: "Bearer " + token }
     });
 
     const data = await res.json();
@@ -90,12 +90,28 @@ async function fetchUsers() {
     }
 
     usersList.innerHTML = "";
+
     data.users.forEach(u => {
+      let buttonHTML = "";
+
+      if (u.friends.includes(me.id)) {
+        buttonHTML = `<button disabled>Friends</button>`;
+      }
+      else if (u.pendingRequests.includes(me.id)) {
+        buttonHTML = `<button onclick="acceptRequest('${u._id}')">Accept</button>`;
+      }
+      else if (u.sentRequests && u.sentRequests.includes(me.id)) {
+        buttonHTML = `<button disabled>Requested</button>`;
+      }
+      else {
+        buttonHTML = `<button onclick="sendRequest('${u._id}')">Add Friend</button>`;
+      }
+
       usersList.innerHTML += `
         <div class="userRow">
           <img src="${u.avatar}" />
           <span>${u.username}</span>
-          <button disabled>Chat locked</button>
+          ${buttonHTML}
         </div>
       `;
     });
@@ -103,6 +119,34 @@ async function fetchUsers() {
   } catch {
     usersList.innerText = "Server error";
   }
+}
+
+/* ================= FRIEND REQUESTS ================= */
+
+async function sendRequest(id) {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(API + "/friend-request/" + id, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+  alert(data.message);
+  fetchUsers();
+}
+
+async function acceptRequest(id) {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(API + "/friend-accept/" + id, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+  alert(data.message);
+  fetchUsers();
 }
 
 /* ================= LOGOUT ================= */
