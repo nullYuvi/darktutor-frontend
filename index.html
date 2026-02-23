@@ -7,40 +7,35 @@
 </head>
 <body>
 
-  <!-- Animated background -->
+  <!-- Background animation -->
   <div class="space">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
 
-  <!-- App Card -->
-  <div class="card" id="app">
+  <!-- ========== AUTH VIEW (LOGIN / SIGNUP) ========== -->
+  <div class="card" id="authView">
+    <h1>Dark<span>Tutor</span></h1>
+    <p>Learn • Hack • Secure</p>
 
-    <!-- AUTH VIEW -->
-    <div id="authView">
-      <h1>Dark<span>Tutor</span></h1>
-      <p>Learn • Hack • Secure</p>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
 
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
+    <button onclick="loginUser()">Login</button>
+    <button class="outline" onclick="signupUser()">Signup</button>
 
-      <button onclick="loginUser()">Login</button>
-      <button class="outline" onclick="signupUser()">Signup</button>
+    <p id="msg"></p>
+  </div>
 
-      <p id="msg"></p>
-    </div>
+  <!-- ========== DASHBOARD VIEW ========== -->
+  <div class="card" id="dashboardView" style="display:none;">
+    <h2 id="welcome">Welcome</h2>
+    <p>All Users</p>
 
-    <!-- DASHBOARD VIEW -->
-    <div id="dashboardView" style="display:none;">
-      <h2 id="welcome"></h2>
+    <div id="usersList"></div>
 
-      <h3>All Users</h3>
-      <div id="usersList"></div>
-
-      <button class="outline" onclick="logout()">Logout</button>
-    </div>
-
+    <button onclick="logout()">Logout</button>
   </div>
 
   <script src="script.js"></script>
 </body>
-</html>
+      </html>
