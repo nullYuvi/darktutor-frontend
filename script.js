@@ -1,72 +1,77 @@
-alert("JS LOADED OK");
 const API = "https://darktutor.onrender.com";
 
+// elements
 const msg = document.getElementById("msg");
 
-// ---------- SIGNUP ----------
+// ================= SIGNUP =================
 async function signupUser() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  const res = await fetch(API + "/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+  if (!username || !password) {
+    msg.innerText = "Username & password required ❌";
+    return;
+  }
 
-  const data = await res.json();
-  msg.innerText = data.message || "Signup error";
+  try {
+    msg.innerText = "Signing up...";
+
+    const res = await fetch(API + "/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+    msg.innerText = data.message;
+
+  } catch (e) {
+    msg.innerText = "Server not reachable ❌";
+  }
 }
 
-// ---------- LOGIN ----------
+// ================= LOGIN =================
 async function loginUser() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  const res = await fetch(API + "/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+  if (!username || !password) {
+    msg.innerText = "Username & password required ❌";
+    return;
+  }
 
-  const data = await res.json();
+  try {
+    msg.innerText = "Logging in...";
 
-  if (data.success) {
-    // 🔐 SAVE TOKEN
+    const res = await fetch(API + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      msg.innerText = data.message || "Login failed ❌";
+      return;
+    }
+
+    // 🔐 save session
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
 
-    msg.innerText = "Login successful ✅";
-    showProfile();
-  } else {
-    msg.innerText = data.message || "Login failed ❌";
+    // 👉 REDIRECT (IMPORTANT PART)
+    window.location.href = "dashboard.html";
+
+  } catch (e) {
+    msg.innerText = "Server not reachable ❌";
   }
 }
 
-// ---------- AUTO LOGIN ----------
-function showProfile() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) return;
-
-  document.querySelector(".card").innerHTML = `
-    <h2>Welcome, ${user.username} 👋</h2>
-    <p>Role: ${user.role}</p>
-    <p>ChatScore: ${user.chatScore}</p>
-    <button onclick="logout()">Logout</button>
-  `;
-}
-
-// ---------- LOGOUT ----------
-function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  location.reload();
-}
-
-// ---------- ON PAGE LOAD ----------
-window.onload = () => {
+// ================= AUTO LOGIN =================
+(function autoLogin() {
   const token = localStorage.getItem("token");
-  if (token) {
-    showProfile();
+  if (token && window.location.pathname.endsWith("index.html")) {
+    window.location.href = "dashboard.html";
   }
-};
+})();
