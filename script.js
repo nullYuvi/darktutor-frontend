@@ -1,3 +1,4 @@
+alert("JS LOADED OK");
 const API = "https://darktutor.onrender.com";
 
 const msg = document.getElementById("msg");
