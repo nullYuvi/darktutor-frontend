@@ -3,23 +3,19 @@ const API="https://darktutor.onrender.com";
 function signup(){
  fetch(API+"/signup",{method:"POST",
  headers:{'Content-Type':'application/json'},
- body:JSON.stringify({
-   username:username.value,
-   password:password.value
- })}).then(r=>r.json()).then(d=>msg.innerText=d.message);
+ body:JSON.stringify({username:username.value,password:password.value})
+ }).then(r=>r.json()).then(d=>msg.innerText=d.message);
 }
 
 function login(){
  fetch(API+"/login",{method:"POST",
  headers:{'Content-Type':'application/json'},
- body:JSON.stringify({
-   username:username.value,
-   password:password.value
- })}).then(r=>r.json()).then(d=>{
-   if(!d.success)return msg.innerText="Error";
-   localStorage.token=d.token;
-   localStorage.user=JSON.stringify(d.user);
-   load();
+ body:JSON.stringify({username:username.value,password:password.value})
+ }).then(r=>r.json()).then(d=>{
+  if(!d.success)return msg.innerText="Error";
+  localStorage.token=d.token;
+  localStorage.user=JSON.stringify(d.user);
+  load();
  });
 }
 
@@ -31,31 +27,30 @@ function load(){
 }
 
 function fetchUsers(){
- fetch(API+"/users",{headers:{
-  Authorization:"Bearer "+localStorage.token
- }}).then(r=>r.json()).then(d=>{
+ fetch(API+"/users",{headers:{Authorization:"Bearer "+localStorage.token}})
+ .then(r=>r.json()).then(d=>{
   users.innerHTML="";
   d.users.forEach(u=>{
     users.innerHTML+=`
-      <div class="row">
-        <img src="${u.avatar}">
-        ${u.username}
-        <button onclick="sendReq('${u._id}')">Add</button>
-        <button onclick="openChat('${u.username}')">Chat</button>
-      </div>`;
+    <div class="row">
+      <img src="${u.avatar}">
+      ${u.username}
+      <button onclick="sendReq('${u._id}')">Add</button>
+      <button onclick="openChat('${u.username}')">Chat</button>
+    </div>`;
   });
  });
 }
 
 function sendReq(id){
- fetch(API+"/request/"+id,{
+ fetch(API+"/friend-request/"+id,{
   method:"POST",
   headers:{Authorization:"Bearer "+localStorage.token}
  });
 }
 
 function openChat(u){
- location.href="chat.html?u="+u;
+ location.href="chat.html?user="+encodeURIComponent(u);
 }
 
 function logout(){
