@@ -1,143 +1,33 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+body{
+ margin:0;
+ background:black;
+ color:#ffd400;
+ font-family:sans-serif;
 }
 
-body {
-  height: 100vh;
-  background: black;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.card,.chat{
+ width:100vw;
+ max-width:420px;
+ margin:auto;
+ padding:10px;
 }
 
-/* 🌌 Space animation */
-.space span {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border: 2px solid #ffd400;
-  border-radius: 50%;
-  animation: orbit 10s linear infinite;
-  opacity: 0.35;
+input,button{
+ width:100%;
+ margin:5px 0;
+ padding:10px;
 }
 
-.space span:nth-child(1) { top: 10%; left: 20%; animation-duration: 14s; }
-.space span:nth-child(2) { top: 60%; left: 10%; animation-duration: 18s; }
-.space span:nth-child(3) { top: 30%; left: 70%; animation-duration: 12s; }
-.space span:nth-child(4) { top: 80%; left: 60%; animation-duration: 20s; }
-.space span:nth-child(5) { top: 40%; left: 40%; animation-duration: 16s; }
+.hidden{display:none}
 
-@keyframes orbit {
-  0% { transform: rotate(0deg) scale(0.8); }
-  100% { transform: rotate(360deg) scale(1.2); }
+.row{
+ display:flex;
+ align-items:center;
+ gap:5px;
 }
 
-/* 🟨 Card */
-.card {
-  position: relative;
-  z-index: 10;
-  width: 340px;
-  padding: 26px;
-  border: 1px solid #ffd400;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.85);
-  box-shadow: 0 0 25px rgba(255, 212, 0, 0.8);
-  text-align: center;
-}
-
-/* Headings */
-.card h1 {
-  color: white;
-  margin-bottom: 6px;
-}
-
-.card h1 span {
-  color: #ffd400;
-}
-
-.card h2, .card h3 {
-  color: #ffd400;
-  margin-bottom: 10px;
-}
-
-.card p {
-  color: #aaa;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-/* Inputs */
-.card input {
-  width: 100%;
-  padding: 11px;
-  margin-bottom: 12px;
-  background: black;
-  border: 1px solid #ffd400;
-  color: white;
-  border-radius: 7px;
-}
-
-.card input:focus {
-  box-shadow: 0 0 8px #ffd400;
-}
-
-/* Buttons */
-.card button {
-  width: 100%;
-  padding: 11px;
-  margin-top: 8px;
-  background: #ffd400;
-  border: none;
-  color: black;
-  font-weight: bold;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.card button.outline {
-  background: transparent;
-  color: #ffd400;
-  border: 1px solid #ffd400;
-}
-
-#msg {
-  margin-top: 10px;
-  color: #ffd400;
-}
-
-/* USERS LIST */
-#usersList {
-  margin-top: 10px;
-  max-height: 220px;
-  overflow-y: auto;
-  text-align: left;
-}
-
-.userRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px;
-  border-bottom: 1px solid #444;
-}
-
-.userRow img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid #ffd400;
-}
-
-.userRow span {
-  flex: 1;
-  color: white;
-}
-
-.userRow button {
-  padding: 5px 8px;
-  font-size: 12px;
+.row img{
+ width:35px;
+ height:35px;
+ border-radius:50%;
 }
