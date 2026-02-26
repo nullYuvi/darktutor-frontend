@@ -1,79 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>DarkTutor</title>
-  <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Background animation -->
-  <div class="space">
-    <span></span><span></span><span></span><span></span><span></span>
-  </div>
+<div id="auth" class="card">
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <button onclick="signup()">Signup</button>
+  <p id="msg"></p>
+</div>
 
-  <!-- ========== AUTH VIEW (LOGIN / SIGNUP) ========== -->
-  <div class="card" id="authView">
-    <h1>Dark<span>Tutor</span></h1>
-    <p>Learn • Hack • Secure</p>
+<div id="dash" class="card hidden">
+  <h3 id="me"></h3>
+  <div id="users"></div>
+  <button onclick="logout()">Logout</button>
+</div>
 
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-
-    <button onclick="loginUser()">Login</button>
-    <button class="outline" onclick="signupUser()">Signup</button>
-
-    <p id="msg"></p>
-  </div>
-
-  <!-- ========== DASHBOARD VIEW ========== -->
-  <div class="card" id="dashboardView" style="display:none;">
-    <h2 id="welcome">Welcome</h2>
-    <p>All Users</p>
-
-    <div id="usersList"></div>
-
-    <!-- ===== CHAT BOX (ADDED) ===== -->
-    <div id="chatBox" style="display:none; margin-top:15px;">
-      <h3 id="chatWith">Chat</h3>
-
-      <div
-        id="messages"
-        style="
-          height:200px;
-          overflow-y:auto;
-          border:1px solid #ffd400;
-          padding:8px;
-          margin-bottom:8px;
-          color:white;
-          font-size:14px;
-        ">
-      </div>
-
-      <input
-        type="text"
-        id="chatInput"
-        placeholder="Type message..."
-        style="width:100%;padding:8px;margin-bottom:6px;"
-      >
-
-      <button onclick="sendMessage()">Send</button>
-
-      <button
-        id="friendBtn"
-        style="display:none;margin-top:6px;"
-        onclick="sendFriendReqFromChat()">
-        Send Friend Request
-      </button>
-    </div>
-
-    <button style="margin-top:10px;" onclick="logout()">Logout</button>
-  </div>
-
-  <!-- 🔌 SOCKET.IO CLIENT -->
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
-  <!-- MAIN SCRIPT -->
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
-  </html>
+</html>
