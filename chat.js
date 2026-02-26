@@ -1,25 +1,30 @@
 const API="https://darktutor.onrender.com";
-const to=new URLSearchParams(location.search).get("u");
+const other=new URLSearchParams(location.search).get("user");
+with.innerText=other;
 
-function load(){
- fetch(API+"/messages/"+to,{
-  headers:{Authorization:"Bearer "+localStorage.token}
- }).then(r=>r.json()).then(d=>{
-  msgs.innerHTML="";
-  d.forEach(m=>{
-    msgs.innerHTML+=`<p>${m.from}: ${m.text}</p>`;
-  });
- });
-}
-setInterval(load,1500);
+const me=JSON.parse(localStorage.user);
+const socket=io(API,{auth:{token:localStorage.token}});
+
+socket.on("receiveMessage",m=>{
+ add(m.from===me.username?"me":"other",m.text);
+});
+
+socket.on("chatLocked",()=>{
+ warn.classList.remove("hidden");
+ text.disabled=true;
+});
 
 function send(){
- fetch(API+"/message",{method:"POST",
- headers:{
-  'Content-Type':'application/json',
-  Authorization:"Bearer "+localStorage.token
- },
- body:JSON.stringify({to,text:text.value})
- });
+ if(!text.value.trim())return;
+ socket.emit("sendMessage",{to:other,text:text.value});
+ add("me",text.value);
  text.value="";
+}
+
+function add(type,txt){
+ const d=document.createElement("div");
+ d.className="msg "+type;
+ d.innerText=txt;
+ messages.appendChild(d);
+ messages.scrollTop=messages.scrollHeight;
 }
