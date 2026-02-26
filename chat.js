@@ -1,34 +1,25 @@
-const messagesDiv = document.getElementById("messages");
-const input = document.getElementById("messageInput");
+const API="https://darktutor.onrender.com";
+const to=new URLSearchParams(location.search).get("u");
 
-const params = new URLSearchParams(window.location.search);
-const username = params.get("user");
-
-document.getElementById("chatName").innerText = username;
-document.getElementById("chatAvatar").src =
-  "https://i.pravatar.cc/150?u=" + username;
-
-function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage(text, "me");
-  input.value = "";
-
-  // fake reply (for UI testing)
-  setTimeout(() => {
-    addMessage("Reply from " + username, "other");
-  }, 700);
+function load(){
+ fetch(API+"/messages/"+to,{
+  headers:{Authorization:"Bearer "+localStorage.token}
+ }).then(r=>r.json()).then(d=>{
+  msgs.innerHTML="";
+  d.forEach(m=>{
+    msgs.innerHTML+=`<p>${m.from}: ${m.text}</p>`;
+  });
+ });
 }
+setInterval(load,1500);
 
-function addMessage(text, type) {
-  const div = document.createElement("div");
-  div.className = "msg " + type;
-  div.innerText = text;
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-
-function goBack() {
-  window.history.back();
+function send(){
+ fetch(API+"/message",{method:"POST",
+ headers:{
+  'Content-Type':'application/json',
+  Authorization:"Bearer "+localStorage.token
+ },
+ body:JSON.stringify({to,text:text.value})
+ });
+ text.value="";
 }
