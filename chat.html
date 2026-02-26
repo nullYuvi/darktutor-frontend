@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DarkTutor Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="chat-body">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <button onclick="goBack()">←</button>
+    <img id="chatAvatar" src="">
+    <div>
+      <h3 id="chatName">User</h3>
+      <span class="online">Online</span>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="chat-messages" id="messages"></div>
+
+  <!-- INPUT -->
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">➤</button>
+  </div>
+
+  <script src="chat.js"></script>
+</body>
+</html>
