@@ -1,26 +1,46 @@
+<!-- ===== index.html ===== -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<link rel="stylesheet" href="style.css">
-<title>DarkTutor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>DarkTutor - Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container" id="auth-container">
+    <h1 class="gold">DarkTutor</h1>
+    <div class="card">
+      <h2 id="form-title">Login</h2>
+      <form id="auth-form">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit" id="auth-submit">Login</button>
+      </form>
+      <p id="toggle-auth">Don't have an account? <a href="#" id="toggle-link">Sign up</a></p>
+    </div>
+  </div>
 
-<div class="card" id="auth">
-  <input id="username" placeholder="Username">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <button onclick="signup()">Signup</button>
-  <p id="msg"></p>
-</div>
+  <div class="container" id="dashboard-container" style="display: none;">
+    <header>
+      <h1 class="gold">DarkTutor</h1>
+      <div class="user-info">
+        <span id="dashboard-username"></span>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </header>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search users...">
+    </div>
+    <h2>Users</h2>
+    <div id="users-list" class="users-list"></div>
 
-<div class="card hidden" id="dash">
-  <h3 id="me"></h3>
-  <div id="users"></div>
-  <button onclick="logout()">Logout</button>
-</div>
+    <!-- Friend requests section (optional) -->
+    <h2>Friend Requests</h2>
+    <div id="requests-list" class="users-list"></div>
+  </div>
 
-<script src="script.js"></script>
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
