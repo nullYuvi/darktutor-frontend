@@ -9,6 +9,7 @@ const socket = io(API);
 let chatId = null;
 
 chatName.innerText = other.username;
+chatAvatar.src = other.avatar;
 
 socket.emit("online", me._id);
 
@@ -27,19 +28,19 @@ async function init() {
   const m = await fetch(API + "/api/chat/messages/" + chatId, {
     headers: { Authorization: token }
   });
-  (await m.json()).forEach(show);
+  (await m.json()).forEach(showMsg);
 }
 
-function show(m) {
-  const d = document.createElement("div");
-  d.className = m.sender === me._id ? "me" : "other";
-  d.innerText = m.text;
-  msgs.appendChild(d);
+function showMsg(m) {
+  const div = document.createElement("div");
+  div.className = "msg " + (m.sender === me._id ? "me" : "other");
+  div.innerText = m.text;
+  msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
 function send() {
-  if (!msg.value) return;
+  if (!msg.value.trim()) return;
   socket.emit("sendMessage", {
     chatId,
     sender: me._id,
@@ -49,10 +50,10 @@ function send() {
 }
 
 socket.on("newMessage", m => {
-  if (m.chatId === chatId) show(m);
+  if (m.chatId === chatId) showMsg(m);
 });
 
-function back() {
+function goBack() {
   location = "index.html";
 }
 
