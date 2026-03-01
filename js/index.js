@@ -1,61 +1,102 @@
-const API="https://darktutor-backend.onrender.com";
-const token=localStorage.token;
-const me=JSON.parse(localStorage.user||"null");
-if(!token||!me) location="login.html";
+const API = "https://darktutor-backend.onrender.com";
+const token = localStorage.token;
+const me = JSON.parse(localStorage.user || "null");
 
-const s=io(API);
-let chat=null;
+if (!token || !me) location = "login.html";
 
-s.emit("online",me._id);
+const socket = io(API);
+let currentChat = null;
 
-async function load(){
-  const r=await fetch(API+"/api/chat/users",{headers:{Authorization:token}});
-  const u=await r.json();
-  users.innerHTML="";
-  u.forEach(x=>{
-    const d=document.createElement("div");
-    d.innerText=x.username+(x.online?" 🟢":"");
-    d.onclick=()=>start(x._id,x.username);
+socket.emit("online", me._id);
+
+async function loadUsers() {
+  const res = await fetch(API + "/api/chat/users", {
+    headers: { Authorization: token }
+  });
+  const users = await res.json();
+
+  renderUsers(users);
+
+  // search
+  search.oninput = () => {
+    const q = search.value.toLowerCase();
+    renderUsers(users.filter(u =>
+      u.username.toLowerCase().includes(q)
+    ));
+  };
+}
+
+function renderUsers(list) {
+  users.innerHTML = "";
+  list.forEach(u => {
+    const d = document.createElement("div");
+    d.className = "user";
+    d.innerHTML = `
+      <img src="${u.avatar}">
+      <span>${u.username}</span>
+      <small>${u.online ? "🟢" : "⚪"}</small>
+    `;
+
+    d.onclick = () => openChat(u);
+    d.ondblclick = () => showProfile(u);
+
     users.appendChild(d);
   });
 }
-load();
 
-async function start(id,n){
-  const r=await fetch(API+"/api/chat/private",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      Authorization:token
+async function openChat(u) {
+  const res = await fetch(API + "/api/chat/private", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
     },
-    body:JSON.stringify({userId:id})
+    body: JSON.stringify({ userId: u._id })
   });
-  const c=await r.json();
-  chat=c._id;
-  msgs.innerHTML="<b>"+n+"</b>";
-  loadMsgs();
+
+  const chat = await res.json();
+  currentChat = chat._id;
+
+  chatHeader.innerText = u.username;
+  msg.disabled = false;
+  sendBtn.disabled = false;
+  msgs.innerHTML = "";
+
+  const m = await fetch(API + "/api/chat/messages/" + currentChat,
+    { headers: { Authorization: token } });
+  (await m.json()).forEach(showMsg);
 }
 
-async function loadMsgs(){
-  const r=await fetch(API+"/api/chat/messages/"+chat,
-    {headers:{Authorization:token}});
-  const m=await r.json();
-  m.forEach(show);
-}
-
-function show(m){
-  const d=document.createElement("div");
-  d.className=m.sender===me._id?"me":"other";
-  d.innerText=m.text;
+function showMsg(m) {
+  const d = document.createElement("div");
+  d.className = m.sender === me._id ? "me" : "other";
+  d.innerText = m.text;
   msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
-function send(){
-  if(!chat) return;
-  s.emit("sendMessage",{chatId:chat,sender:me._id,text:msg.value});
-  msg.value="";
+function send() {
+  if (!currentChat || !msg.value) return;
+  socket.emit("sendMessage", {
+    chatId: currentChat,
+    sender: me._id,
+    text: msg.value
+  });
+  msg.value = "";
 }
 
-s.on("newMessage",m=>{
-  if(m.chatId===chat) show(m);
+socket.on("newMessage", m => {
+  if (m.chatId === currentChat) showMsg(m);
 });
+
+// PROFILE
+function showProfile(u) {
+  pAvatar.src = u.avatar;
+  pName.innerText = u.username;
+  profile.style.display = "flex";
+}
+function closeProfile() {
+  profile.style.display = "none";
+}
+
+loadUsers();
