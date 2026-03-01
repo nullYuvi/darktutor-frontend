@@ -1,65 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>DarkTutor Chat</title>
-
-  <!-- Premium Dark UI -->
-  <link rel="stylesheet" href="css/style.css" />
-
-  <!-- Socket.IO -->
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>DarkTutor Chat</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 <body>
-
-  <!-- Top Bar -->
-  <header class="top-bar">
-    <div class="logo">DarkTutor</div>
-    <input id="search" type="text" placeholder="Search users / chats..." />
-  </header>
-
-  <!-- Main Layout -->
-  <div class="container">
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h3>Chats</h3>
-      <ul id="chat-list">
-        <!-- Chats dynamically -->
-      </ul>
-    </aside>
-
-    <!-- Chat Area -->
-    <main class="chat-area">
-
-      <!-- Online users -->
-      <div class="online-users" id="online-users">
-        <!-- Online users -->
-      </div>
-
-      <!-- Messages -->
-      <div class="messages" id="messages">
-        <div class="placeholder">
-          Select a chat to start messaging
-        </div>
-      </div>
-
-      <!-- Input -->
-      <div class="input-area">
-        <input
-          type="text"
-          id="messageInput"
-          placeholder="Type a message..."
-        />
-        <button id="sendBtn">Send</button>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- Main JS -->
-  <script src="js/index.js"></script>
+<header>DarkTutor</header>
+<div class="wrap">
+<aside id="users"></aside>
+<main>
+<div id="msgs"></div>
+<input id="msg" placeholder="Message">
+<button onclick="send()">Send</button>
+</main>
+</div>
+<script src="js/index.js"></script>
 </body>
 </html>
