@@ -5,47 +5,59 @@ const me = JSON.parse(localStorage.user || "null");
 if (!token || !me) location = "login.html";
 
 const socket = io(API);
-let currentChat = null;
-
 socket.emit("online", me._id);
 
+const onlineDiv = document.getElementById("onlineUsers");
+const allDiv = document.getElementById("allUsers");
+
+let usersList = [];
+
+// LOGOUT
+function logout() {
+  localStorage.clear();
+  location = "login.html";
+}
+
+// LOAD USERS
 async function loadUsers() {
   const res = await fetch(API + "/api/chat/users", {
     headers: { Authorization: token }
   });
-  const users = await res.json();
-
-  renderUsers(users);
-
-  // search
-  search.oninput = () => {
-    const q = search.value.toLowerCase();
-    renderUsers(users.filter(u =>
-      u.username.toLowerCase().includes(q)
-    ));
-  };
+  usersList = await res.json();
+  renderUsers(usersList);
 }
 
+// RENDER
 function renderUsers(list) {
-  users.innerHTML = "";
+  onlineDiv.innerHTML = "";
+  allDiv.innerHTML = "";
+
   list.forEach(u => {
-    const d = document.createElement("div");
-    d.className = "user";
-    d.innerHTML = `
-      <img src="${u.avatar}">
-      <span>${u.username}</span>
-      <small>${u.online ? "🟢" : "⚪"}</small>
-    `;
+    const div = document.createElement("div");
+    div.className = "user";
+    div.innerText = u.username;
+    div.onclick = () => openChat(u);
 
-    d.onclick = () => openChat(u);
-    d.ondblclick = () => showProfile(u);
-
-    users.appendChild(d);
+    if (u.online) {
+      onlineDiv.appendChild(div.cloneNode(true));
+    }
+    allDiv.appendChild(div);
   });
 }
 
+// SEARCH
+search.oninput = () => {
+  const q = search.value.toLowerCase();
+  renderUsers(
+    usersList.filter(u =>
+      u.username.toLowerCase().includes(q)
+    )
+  );
+};
+
+// CHAT (redirect simple)
 async function openChat(u) {
-  const res = await fetch(API + "/api/chat/private", {
+  const r = await fetch(API + "/api/chat/private", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,50 +65,8 @@ async function openChat(u) {
     },
     body: JSON.stringify({ userId: u._id })
   });
-
-  const chat = await res.json();
-  currentChat = chat._id;
-
-  chatHeader.innerText = u.username;
-  msg.disabled = false;
-  sendBtn.disabled = false;
-  msgs.innerHTML = "";
-
-  const m = await fetch(API + "/api/chat/messages/" + currentChat,
-    { headers: { Authorization: token } });
-  (await m.json()).forEach(showMsg);
-}
-
-function showMsg(m) {
-  const d = document.createElement("div");
-  d.className = m.sender === me._id ? "me" : "other";
-  d.innerText = m.text;
-  msgs.appendChild(d);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function send() {
-  if (!currentChat || !msg.value) return;
-  socket.emit("sendMessage", {
-    chatId: currentChat,
-    sender: me._id,
-    text: msg.value
-  });
-  msg.value = "";
-}
-
-socket.on("newMessage", m => {
-  if (m.chatId === currentChat) showMsg(m);
-});
-
-// PROFILE
-function showProfile(u) {
-  pAvatar.src = u.avatar;
-  pName.innerText = u.username;
-  profile.style.display = "flex";
-}
-function closeProfile() {
-  profile.style.display = "none";
+  const chat = await r.json();
+  alert("Chat started with " + u.username + " (UI next)");
 }
 
 loadUsers();
