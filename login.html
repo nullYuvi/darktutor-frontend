@@ -1,34 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>DarkTutor Login</title>
-
-  <link rel="stylesheet" href="css/style.css" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>DarkTutor Login</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
-<body class="auth-body">
-
-  <div class="auth-box">
-    <h1>DarkTutor</h1>
-    <p class="tagline">Secure. Dark. Real-time.</p>
-
-    <input id="username" type="text" placeholder="Username" />
-    <input id="password" type="password" placeholder="Password" />
-
-    <div class="avatar-select">
-      <img src="https://i.imgur.com/1X6RZ4C.png" class="avatar active">
-      <img src="https://i.imgur.com/qIufhof.png" class="avatar">
-      <img src="https://i.imgur.com/9yG6yKp.png" class="avatar">
-    </div>
-
-    <button onclick="login()">Login</button>
-    <button class="secondary" onclick="register()">Register</button>
-
-    <p id="msg"></p>
-  </div>
-
-  <script src="js/login.js"></script>
+<body class="auth">
+<div class="box">
+<h1>DarkTutor</h1>
+<input id="u" placeholder="Username">
+<input id="p" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="reg()">Register</button>
+<p id="m"></p>
+</div>
+<script src="js/login.js"></script>
 </body>
 </html>
