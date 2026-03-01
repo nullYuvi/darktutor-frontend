@@ -1,46 +1,65 @@
-<!-- ===== index.html ===== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>DarkTutor - Login</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>DarkTutor Chat</title>
+
+  <!-- Premium Dark UI -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Socket.IO -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 <body>
-  <div class="container" id="auth-container">
-    <h1 class="gold">DarkTutor</h1>
-    <div class="card">
-      <h2 id="form-title">Login</h2>
-      <form id="auth-form">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit" id="auth-submit">Login</button>
-      </form>
-      <p id="toggle-auth">Don't have an account? <a href="#" id="toggle-link">Sign up</a></p>
-    </div>
-  </div>
 
-  <div class="container" id="dashboard-container" style="display: none;">
-    <header>
-      <h1 class="gold">DarkTutor</h1>
-      <div class="user-info">
-        <span id="dashboard-username"></span>
-        <button id="logout-btn">Logout</button>
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="logo">DarkTutor</div>
+    <input id="search" type="text" placeholder="Search users / chats..." />
+  </header>
+
+  <!-- Main Layout -->
+  <div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3>Chats</h3>
+      <ul id="chat-list">
+        <!-- Chats dynamically -->
+      </ul>
+    </aside>
+
+    <!-- Chat Area -->
+    <main class="chat-area">
+
+      <!-- Online users -->
+      <div class="online-users" id="online-users">
+        <!-- Online users -->
       </div>
-    </header>
-    <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Search users...">
-    </div>
-    <h2>Users</h2>
-    <div id="users-list" class="users-list"></div>
 
-    <!-- Friend requests section (optional) -->
-    <h2>Friend Requests</h2>
-    <div id="requests-list" class="users-list"></div>
+      <!-- Messages -->
+      <div class="messages" id="messages">
+        <div class="placeholder">
+          Select a chat to start messaging
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Type a message..."
+        />
+        <button id="sendBtn">Send</button>
+      </div>
+
+    </main>
   </div>
 
-  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-  <script src="script.js"></script>
+  <!-- Main JS -->
+  <script src="js/index.js"></script>
 </body>
 </html>
