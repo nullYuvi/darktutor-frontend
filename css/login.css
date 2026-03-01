@@ -1,20 +1,109 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 body {
-  margin:0;
-  background:#0b141a;
-  color:#fff;
-  font-family:sans-serif;
+  margin: 0;
+  background: radial-gradient(circle at top, #0f2027, #0b141a 60%);
+  color: #fff;
 }
 
+/* ===== CENTER ===== */
 .auth {
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* ===== CARD ===== */
 .box {
-  background:#1f2c34;
-  padding:20px;
-  border-radius:10px;
-  width:260px;
+  width: 280px;
+  background: #1f2c34;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.4);
+
+  /* animation */
+  animation: popIn .6s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.box h1 {
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: .5px;
+}
+
+/* ===== INPUTS ===== */
+.box input {
+  width: 100%;
+  padding: 11px 12px;
+  margin: 7px 0;
+  border-radius: 9px;
+  border: none;
+  outline: none;
+  background: #111b21;
+  color: #fff;
+  transition: box-shadow .25s ease, transform .15s ease;
+}
+
+.box input::placeholder {
+  color: #9fb2bd;
+}
+
+.box input:focus {
+  box-shadow: 0 0 0 2px #00a88455;
+  transform: translateY(-1px);
+}
+
+/* ===== BUTTONS ===== */
+.box button {
+  width: 100%;
+  padding: 11px;
+  margin-top: 10px;
+  border-radius: 9px;
+  border: none;
+  background: #00a884;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s;
+}
+
+.box button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,168,132,.35);
+}
+
+.box button:active {
+  transform: scale(.98);
+  opacity: .9;
+}
+
+/* secondary button (Register) */
+.box button + button {
+  background: #202c33;
+}
+
+/* ===== MESSAGE ===== */
+# m,
+#m {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  min-height: 16px;
+  opacity: .9;
 }
