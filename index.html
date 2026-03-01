@@ -10,32 +10,26 @@
 
 <body>
 
-<header class="top">
-  <span class="logo">DarkTutor</span>
-  <input id="search" placeholder="Search username...">
+<!-- TOP BAR -->
+<header class="topbar">
+  <button class="logout" onclick="logout()">Logout</button>
+  <span class="title">DarkTutor</span>
 </header>
 
-<div class="layout">
-  <aside id="users"></aside>
-
-  <main>
-    <div id="chatHeader">Select a user to start chat</div>
-    <div id="msgs"></div>
-
-    <div class="send">
-      <input id="msg" placeholder="Type message..." disabled>
-      <button onclick="send()" disabled id="sendBtn">Send</button>
-    </div>
-  </main>
+<!-- SEARCH -->
+<div class="searchBox">
+  <input id="search" placeholder="Search username...">
 </div>
 
-<!-- PROFILE MODAL -->
-<div id="profile" class="modal">
-  <div class="modalBox">
-    <img id="pAvatar">
-    <h3 id="pName"></h3>
-    <button onclick="closeProfile()">Close</button>
-  </div>
+<!-- USERS -->
+<div class="section">
+  <h4>🟢 Online Users</h4>
+  <div id="onlineUsers"></div>
+</div>
+
+<div class="section">
+  <h4>👥 All Users</h4>
+  <div id="allUsers"></div>
 </div>
 
 <script src="js/index.js"></script>
