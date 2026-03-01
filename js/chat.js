@@ -33,6 +33,16 @@ async function init() {
 }
 init();
 
+// 🔵 mark all received messages as seen
+setTimeout(() => {
+  document.querySelectorAll(".msg.other").forEach(el => {
+    const id = el.dataset.id;
+    if (id) {
+      socket.emit("seenMessage", id);
+    }
+  });
+}, 800);
+
 // RENDER MESSAGE
 function showMsg(m) {
   const d = document.createElement("div");
