@@ -1,3 +1,99 @@
+/* ===== GLOBAL ===== */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0b141a;
+  color: #fff;
+}
+
+/* ===== LOGIN PAGE ===== */
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  background: #1f2c34;
+  padding: 20px;
+  border-radius: 12px;
+  width: 260px;
+  text-align: center;
+}
+
+.box h1 {
+  margin-bottom: 15px;
+}
+
+.box input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: none;
+}
+
+.box button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #00a884;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ===== USERS LIST PAGE ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #1f2c34;
+}
+
+.logout {
+  background: none;
+  border: 1px solid #00a884;
+  color: #00a884;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.title {
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+}
+
+.searchBox {
+  padding: 10px;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.section {
+  padding: 10px;
+}
+
+.user {
+  padding: 10px;
+  background: #1f2c34;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 /* ===== CHAT PAGE ===== */
 
 .chat-body {
