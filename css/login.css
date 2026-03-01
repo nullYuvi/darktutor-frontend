@@ -1,0 +1,20 @@
+body {
+  margin:0;
+  background:#0b141a;
+  color:#fff;
+  font-family:sans-serif;
+}
+
+.auth {
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.box {
+  background:#1f2c34;
+  padding:20px;
+  border-radius:10px;
+  width:260px;
+}
