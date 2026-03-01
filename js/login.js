@@ -1,53 +1,27 @@
-const API = "https://darktutor-backend.onrender.com";
-let selectedAvatar = document.querySelector(".avatar").src;
+const API="https://darktutor-backend.onrender.com";
 
-// avatar select
-document.querySelectorAll(".avatar").forEach(img => {
-  img.onclick = () => {
-    document.querySelectorAll(".avatar").forEach(a => a.classList.remove("active"));
-    img.classList.add("active");
-    selectedAvatar = img.src;
-  };
-});
-
-async function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-
-  const res = await fetch(API + "/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
+async function login(){
+  const r=await fetch(API+"/api/auth/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username:u.value,password:p.value})
   });
-
-  const data = await res.json();
-  if (!res.ok) return show(data.msg);
-
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("user", JSON.stringify(data.user));
-  location.href = "index.html";
+  const d=await r.json();
+  if(!r.ok) return m.innerText=d.msg;
+  localStorage.token=d.token;
+  localStorage.user=JSON.stringify(d.user);
+  location="index.html";
 }
 
-async function register() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-
-  const res = await fetch(API + "/api/auth/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username,
-      password,
-      avatar: selectedAvatar
+async function reg(){
+  await fetch(API+"/api/auth/register",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      username:u.value,
+      password:p.value,
+      avatar:"https://i.imgur.com/1X6RZ4C.png"
     })
   });
-
-  const data = await res.json();
-  if (!res.ok) return show("Registration failed");
-
-  show("Registered! Now login.");
-}
-
-function show(msg) {
-  document.getElementById("msg").innerText = msg;
+  m.innerText="Registered. Now login.";
 }
