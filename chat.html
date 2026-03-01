@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Chat | DarkTutor</title>
+
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+
+<body>
+
+<header class="topbar">
+  <button onclick="back()">⬅ Back</button>
+  <span id="chatName"></span>
+</header>
+
+<div id="msgs" class="chatBox"></div>
+
+<div class="send">
+  <input id="msg" placeholder="Type message...">
+  <button onclick="send()">Send</button>
+</div>
+
+<script src="js/chat.js"></script>
+</body>
+</html>
