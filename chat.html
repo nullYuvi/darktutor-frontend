@@ -8,18 +8,22 @@
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 
-<body>
+<body class="chat-body">
 
-<header class="topbar">
-  <button onclick="back()">⬅ Back</button>
-  <span id="chatName"></span>
-</header>
+<!-- HEADER -->
+<div class="chat-header">
+  <span class="back" onclick="goBack()">←</span>
+  <img id="chatAvatar" class="chat-avatar">
+  <span id="chatName" class="chat-name"></span>
+</div>
 
-<div id="msgs" class="chatBox"></div>
+<!-- MESSAGES -->
+<div id="msgs" class="chat-messages"></div>
 
-<div class="send">
-  <input id="msg" placeholder="Type message...">
-  <button onclick="send()">Send</button>
+<!-- INPUT BAR -->
+<div class="chat-input">
+  <input id="msg" placeholder="Message">
+  <button onclick="send()">➤</button>
 </div>
 
 <script src="js/chat.js"></script>
