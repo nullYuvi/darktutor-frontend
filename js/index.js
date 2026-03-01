@@ -4,69 +4,44 @@ const me = JSON.parse(localStorage.user || "null");
 
 if (!token || !me) location = "login.html";
 
-const socket = io(API);
-socket.emit("online", me._id);
-
-const onlineDiv = document.getElementById("onlineUsers");
-const allDiv = document.getElementById("allUsers");
-
-let usersList = [];
-
-// LOGOUT
 function logout() {
   localStorage.clear();
   location = "login.html";
 }
 
-// LOAD USERS
+let usersList = [];
+
 async function loadUsers() {
   const res = await fetch(API + "/api/chat/users", {
     headers: { Authorization: token }
   });
   usersList = await res.json();
-  renderUsers(usersList);
+  render(usersList);
 }
 
-// RENDER
-function renderUsers(list) {
-  onlineDiv.innerHTML = "";
-  allDiv.innerHTML = "";
+function render(list) {
+  onlineUsers.innerHTML = "";
+  allUsers.innerHTML = "";
 
   list.forEach(u => {
     const div = document.createElement("div");
     div.className = "user";
     div.innerText = u.username;
-    div.onclick = () => openChat(u);
+    div.onclick = () => {
+      localStorage.chatUser = JSON.stringify(u);
+      location = "chat.html";
+    };
 
-    if (u.online) {
-      onlineDiv.appendChild(div.cloneNode(true));
-    }
-    allDiv.appendChild(div);
+    if (u.online) onlineUsers.appendChild(div.cloneNode(true));
+    allUsers.appendChild(div);
   });
 }
 
-// SEARCH
 search.oninput = () => {
   const q = search.value.toLowerCase();
-  renderUsers(
-    usersList.filter(u =>
-      u.username.toLowerCase().includes(q)
-    )
-  );
+  render(usersList.filter(u =>
+    u.username.toLowerCase().includes(q)
+  ));
 };
-
-// CHAT (redirect simple)
-async function openChat(u) {
-  const r = await fetch(API + "/api/chat/private", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
-    },
-    body: JSON.stringify({ userId: u._id })
-  });
-  const chat = await r.json();
-  alert("Chat started with " + u.username + " (UI next)");
-}
 
 loadUsers();
