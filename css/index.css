@@ -1,0 +1,130 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #0b141a, #0f2027);
+  color: #fff;
+  min-height: 100vh;
+  animation: bgFade 1s ease;
+}
+
+@keyframes bgFade {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: rgba(31, 44, 52, 0.95);
+  backdrop-filter: blur(6px);
+  animation: slideDown .5s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0 }
+  to { transform: translateY(0); opacity: 1 }
+}
+
+.logout {
+  background: none;
+  border: 1px solid #00a884;
+  color: #00a884;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+
+.logout:active {
+  transform: scale(.95);
+  background: rgba(0,168,132,.15);
+}
+
+.title {
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  letter-spacing: .4px;
+}
+
+/* ===== SEARCH ===== */
+.searchBox {
+  padding: 12px;
+  animation: fadeUp .5s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #111b21;
+  color: #fff;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  padding: 10px 12px;
+}
+
+.section h4 {
+  margin: 10px 0;
+  font-weight: 500;
+  opacity: .85;
+}
+
+/* ===== USER CARD ===== */
+.user {
+  background: #1f2c34;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  animation: userIn .3s ease;
+  transition: transform .15s ease, background .15s ease;
+}
+
+@keyframes userIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.user:hover {
+  background: #24343d;
+  transform: translateX(4px);
+}
+
+.user:active {
+  transform: scale(.97);
+}
+
+/* ===== ONLINE DOT ===== */
+.user::after {
+  content: "●";
+  font-size: 10px;
+  color: #00ff9c;
+}
