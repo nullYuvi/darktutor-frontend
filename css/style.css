@@ -55,3 +55,15 @@ body {
   border-radius:6px;
   cursor:pointer;
 }
+
+.chatBox {
+  flex:1;
+  padding:10px;
+  overflow:auto;
+}
+
+.send {
+  display:flex;
+  padding:10px;
+  gap:5px;
+}
