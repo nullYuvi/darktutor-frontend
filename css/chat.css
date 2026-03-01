@@ -128,3 +128,18 @@
 .chat-input button:active {
   transform: scale(.92);
 }
+
+/* ===== MESSAGE TICKS ===== */
+.ticks {
+  font-size: 11px;
+  margin-left: 6px;
+  color: #999;
+}
+
+.ticks.delivered {
+  color: #999;
+}
+
+.ticks.seen {
+  color: #4fc3f7; /* blue ticks */
+}
