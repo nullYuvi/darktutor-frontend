@@ -11,11 +11,22 @@
 <body class="chat-body">
 
 <!-- HEADER -->
-<div class="chat-header">
-  <span class="back" onclick="goBack()">←</span>
-  <img id="chatAvatar" class="chat-avatar">
-  <span id="chatName" class="chat-name"></span>
-</div>
+<body class="chat-body">
+
+  <div class="chat-header">
+    <span class="back" onclick="goBack()">←</span>
+    <img id="chatAvatar" class="chat-avatar">
+    <span id="chatName" class="chat-name"></span>
+  </div>
+
+  <div id="msgs" class="chat-messages"></div>
+
+  <div class="chat-input">
+    <input id="msg" placeholder="Message">
+    <button onclick="send()">➤</button>
+  </div>
+
+</body>
 
 <!-- MESSAGES -->
 <div id="msgs" class="chat-messages"></div>
