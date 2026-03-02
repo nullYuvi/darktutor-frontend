@@ -1,42 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Chat | DarkTutor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>Chat | DarkTutor</title>
 
-<link rel="stylesheet" href="css/chat.css">
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <link rel="stylesheet" href="css/chat.css">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 
 <body class="chat-body">
 
-<!-- HEADER -->
-<body class="chat-body">
-
+  <!-- HEADER -->
   <div class="chat-header">
     <span class="back" onclick="goBack()">←</span>
     <img id="chatAvatar" class="chat-avatar">
     <span id="chatName" class="chat-name"></span>
   </div>
 
+  <!-- MESSAGES -->
   <div id="msgs" class="chat-messages"></div>
 
-  <div class="chat-input">
-    <input id="msg" placeholder="Message">
-    <button onclick="send()">➤</button>
-  </div>
+  <!-- INPUT BAR -->
+  <form class="chat-input" onsubmit="send(event)">
+    <input id="msg" placeholder="Message" autocomplete="off">
+    <button type="submit">➤</button>
+  </form>
 
-</body>
-
-<!-- MESSAGES -->
-<div id="msgs" class="chat-messages"></div>
-
-<!-- INPUT BAR -->
-<div class="chat-input">
-  <input id="msg" placeholder="Message">
-  <button onclick="send()">➤</button>
-</div>
-
-<script src="js/chat.js"></script>
+  <script src="js/chat.js"></script>
 </body>
 </html>
