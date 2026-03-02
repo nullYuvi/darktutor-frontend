@@ -1,51 +1,62 @@
 const API = "https://darktutor-backend.onrender.com";
 
+/* ===== USER DATA ===== */
 const me = JSON.parse(localStorage.user || "null");
 const other = JSON.parse(localStorage.chatUser || "null");
 
-if (!me || !other) location.href = "index.html";
+if (!me || !other) {
+  location.href = "index.html";
+}
 
+/* ===== SOCKET ===== */
 const socket = io(API);
 
+/* ===== DOM ===== */
 const msgs = document.getElementById("msgs");
 const msgInput = document.getElementById("msg");
 const chatName = document.querySelector(".chat-name");
 const chatAvatar = document.querySelector(".chat-avatar");
 
+/* ===== HEADER DATA ===== */
 chatName.innerText = other.username;
-chatAvatar.src = other.avatar;
+chatAvatar.src = other.avatar || "https://i.imgur.com/1X6RZ4C.png";
 
 let chatId = null;
 
 /* ================= INIT ================= */
 async function init() {
-  const r = await fetch(API + "/api/chat/private", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.token
-    },
-    body: JSON.stringify({ userId: other._id })
-  });
-
-  const chat = await r.json();
-  chatId = chat._id;
-
-  const m = await fetch(API + "/api/chat/messages/" + chatId, {
-    headers: { Authorization: localStorage.token }
-  });
-
-  const list = await m.json();
-  list.forEach(renderMsg);
-
-  // 🔵 MARK ALL RECEIVED MESSAGES AS SEEN
-  setTimeout(() => {
-    list.forEach(x => {
-      if (x.sender !== me._id) {
-        socket.emit("seenMessage", x._id);
-      }
+  try {
+    const r = await fetch(API + "/api/chat/private", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.token
+      },
+      body: JSON.stringify({ userId: other._id })
     });
-  }, 500);
+
+    const chat = await r.json();
+    chatId = chat._id;
+
+    const m = await fetch(API + "/api/chat/messages/" + chatId, {
+      headers: { Authorization: localStorage.token }
+    });
+
+    const list = await m.json();
+    list.forEach(renderMsg);
+
+    // MARK RECEIVED MESSAGES AS SEEN
+    setTimeout(() => {
+      list.forEach(x => {
+        if (x.sender !== me._id) {
+          socket.emit("seenMessage", x._id);
+        }
+      });
+    }, 300);
+
+  } catch (err) {
+    console.error("Init error:", err);
+  }
 }
 init();
 
@@ -57,7 +68,7 @@ function renderMsg(m) {
 
   let ticks = "";
   if (m.sender === me._id) {
-    ticks = `<span class="ticks ${m.status}">✔✔</span>`;
+    ticks = `<span class="ticks ${m.status || "sent"}">✔✔</span>`;
   }
 
   d.innerHTML = `
@@ -70,8 +81,10 @@ function renderMsg(m) {
 }
 
 /* ================= SEND MESSAGE ================= */
-function send() {
-  if (!msgInput.value.trim()) return;
+function send(e) {
+  if (e) e.preventDefault(); // 🔥 MOST IMPORTANT
+
+  if (!msgInput.value.trim() || !chatId) return;
 
   socket.emit("sendMessage", {
     chatId,
@@ -84,11 +97,10 @@ function send() {
 
 /* ================= SOCKET EVENTS ================= */
 
-// NEW MESSAGE
+// RECEIVE MESSAGE
 socket.on("newMessage", m => {
   renderMsg(m);
 
-  // 🔵 if message is from other user → mark seen
   if (m.sender !== me._id) {
     setTimeout(() => {
       socket.emit("seenMessage", m._id);
@@ -96,7 +108,7 @@ socket.on("newMessage", m => {
   }
 });
 
-// STATUS UPDATE (✔✔ grey → ✔✔ blue)
+// UPDATE TICKS
 socket.on("messageStatus", data => {
   const el = document.querySelector(
     `[data-id="${data.id}"] .ticks`
@@ -106,6 +118,7 @@ socket.on("messageStatus", data => {
   el.className = "ticks " + data.status;
 });
 
+/* ================= BACK ================= */
 function goBack() {
   history.back();
 }
