@@ -126,3 +126,17 @@ html, body {
 .ticks.seen {
   color: #4fc3f7;       /* 🔵 BLUE TICK */
 }
+
+/* ===== TYPING INDICATOR ===== */
+.typing {
+  height: 18px;
+  padding: 0 14px;
+  font-size: 12px;
+  color: #9fb2bd;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.typing.show {
+  opacity: 1;
+}
