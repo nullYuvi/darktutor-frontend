@@ -107,3 +107,22 @@ html, body {
   color: #fff;
   font-size: 18px;
 }
+
+/* ===== MESSAGE TICKS ===== */
+.ticks {
+  font-size: 11px;
+  margin-left: 6px;
+  color: #999;          /* delivered */
+}
+
+.ticks.sent {
+  color: #999;
+}
+
+.ticks.delivered {
+  color: #999;
+}
+
+.ticks.seen {
+  color: #4fc3f7;       /* 🔵 BLUE TICK */
+}
