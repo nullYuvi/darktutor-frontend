@@ -5,7 +5,7 @@
         content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
   <title>Chat | DarkTutor</title>
 
-  <!-- ✅ FIXED PATHS -->
+  <!-- CHAT CSS -->
   <link rel="stylesheet" href="./css/chat.css">
 
   <!-- Socket.io -->
@@ -21,14 +21,14 @@
     <span id="chatName" class="chat-name"></span>
   </div>
 
-<div id="typing" class="typing"></div>
-
   <!-- MESSAGES -->
   <div id="msgs" class="chat-messages"></div>
 
+  <!-- ✅ TYPING INDICATOR (MESSAGE KE NICHE, INPUT KE UPAR) -->
+  <div id="typing" class="typing"></div>
+
   <!-- INPUT BAR -->
   <form class="chat-input" onsubmit="send(event)">
-    <!-- ✅ inputmode + enterkeyhint = better mobile keyboard -->
     <input
       id="msg"
       placeholder="Message"
@@ -39,7 +39,7 @@
     <button type="submit" aria-label="Send">➤</button>
   </form>
 
-  <!-- ✅ FIXED PATH -->
+  <!-- CHAT JS -->
   <script src="./js/chat.js"></script>
 </body>
 </html>
