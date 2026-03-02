@@ -16,12 +16,14 @@ const msgs = document.getElementById("msgs");
 const msgInput = document.getElementById("msg");
 const chatName = document.querySelector(".chat-name");
 const chatAvatar = document.querySelector(".chat-avatar");
+const typingDiv = document.getElementById("typing");
 
 /* ===== HEADER DATA ===== */
 chatName.innerText = other.username;
 chatAvatar.src = other.avatar || "https://i.imgur.com/1X6RZ4C.png";
 
 let chatId = null;
+let typingTimeout = null;
 
 /* ================= INIT ================= */
 async function init() {
@@ -82,7 +84,7 @@ function renderMsg(m) {
 
 /* ================= SEND MESSAGE ================= */
 function send(e) {
-  if (e) e.preventDefault(); // 🔥 MOST IMPORTANT
+  if (e) e.preventDefault();
 
   if (!msgInput.value.trim() || !chatId) return;
 
@@ -94,6 +96,16 @@ function send(e) {
 
   msgInput.value = "";
 }
+
+/* ================= TYPING EMIT ================= */
+msgInput.addEventListener("input", () => {
+  if (!chatId) return;
+
+  socket.emit("typing", {
+    chatId,
+    from: me._id
+  });
+});
 
 /* ================= SOCKET EVENTS ================= */
 
@@ -116,6 +128,19 @@ socket.on("messageStatus", data => {
   if (!el) return;
 
   el.className = "ticks " + data.status;
+});
+
+// SHOW TYPING INDICATOR
+socket.on("typing", data => {
+  if (data.from === me._id) return;
+
+  typingDiv.innerText = `${other.username} is typing…`;
+  typingDiv.classList.add("show");
+
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    typingDiv.classList.remove("show");
+  }, 1000);
 });
 
 /* ================= BACK ================= */
