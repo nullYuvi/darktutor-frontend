@@ -12,9 +12,9 @@ html, body {
   color: #fff;
 }
 
-/* ===== CHAT LAYOUT ===== */
+/* ===== CHAT BODY (KEYBOARD SAFE) ===== */
 .chat-body {
-  height: 100dvh; /* ✅ keyboard-safe */
+  height: 100dvh;                 /* 🔥 keyboard safe */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -22,34 +22,50 @@ html, body {
 
 /* ===== HEADER ===== */
 .chat-header {
-  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
+
+  padding: 10px 12px;
   background: #1f2c34;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .back {
-  font-size: 20px;
+  font-size: 22px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  user-select: none;
+}
+
+.back:active {
+  background: rgba(255,255,255,0.15);
 }
 
 .chat-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .chat-name {
   font-weight: 600;
+  font-size: 15px;
 }
 
-/* ===== MESSAGES ===== */
+/* ===== MESSAGES AREA ===== */
 .chat-messages {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  padding-bottom: 80px; /* space for input */
+  padding-bottom: 90px;   /* input ke liye space */
+  background: #0b141a;
 }
 
 /* ===== MESSAGE BUBBLES ===== */
@@ -60,6 +76,7 @@ html, body {
   border-radius: 10px;
   font-size: 14px;
   word-wrap: break-word;
+  line-height: 1.3;
 }
 
 .msg.me {
@@ -81,20 +98,27 @@ html, body {
   color: #aaa;
 }
 
-.ticks.seen {
-  color: #4fc3f7;
+.ticks.delivered {
+  color: #aaa;
 }
 
-/* ===== INPUT BAR (KEYBOARD SAFE) ===== */
+.ticks.seen {
+  color: #4fc3f7;   /* BLUE ✔✔ */
+}
+
+/* ===== INPUT BAR (FIXED) ===== */
 .chat-input {
-  position: fixed;          /* 🔥 KEY FIX */
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+
   display: flex;
   gap: 8px;
   padding: 10px;
+
   background: #1f2c34;
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
 
 .chat-input input {
@@ -103,6 +127,12 @@ html, body {
   border-radius: 20px;
   border: none;
   outline: none;
+  background: #111b21;
+  color: #fff;
+}
+
+.chat-input input::placeholder {
+  color: #9fb2bd;
 }
 
 .chat-input button {
@@ -113,4 +143,9 @@ html, body {
   background: #00a884;
   color: #fff;
   font-size: 18px;
+  cursor: pointer;
+}
+
+.chat-input button:active {
+  transform: scale(0.92);
 }
