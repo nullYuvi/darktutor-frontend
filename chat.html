@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
   <title>Chat | DarkTutor</title>
 
-  <link rel="stylesheet" href="css/chat.css">
+  <!-- ✅ FIXED PATHS -->
+  <link rel="stylesheet" href="./css/chat.css">
+
+  <!-- Socket.io -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 
@@ -13,7 +17,7 @@
   <!-- HEADER -->
   <div class="chat-header">
     <span class="back" onclick="goBack()">←</span>
-    <img id="chatAvatar" class="chat-avatar">
+    <img id="chatAvatar" class="chat-avatar" alt="avatar">
     <span id="chatName" class="chat-name"></span>
   </div>
 
@@ -22,10 +26,18 @@
 
   <!-- INPUT BAR -->
   <form class="chat-input" onsubmit="send(event)">
-    <input id="msg" placeholder="Message" autocomplete="off">
-    <button type="submit">➤</button>
+    <!-- ✅ inputmode + enterkeyhint = better mobile keyboard -->
+    <input
+      id="msg"
+      placeholder="Message"
+      autocomplete="off"
+      inputmode="text"
+      enterkeyhint="send"
+    >
+    <button type="submit" aria-label="Send">➤</button>
   </form>
 
-  <script src="js/chat.js"></script>
+  <!-- ✅ FIXED PATH -->
+  <script src="./js/chat.js"></script>
 </body>
 </html>
