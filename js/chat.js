@@ -105,3 +105,7 @@ socket.on("messageStatus", data => {
 
   el.className = "ticks " + data.status;
 });
+
+function goBack() {
+  history.back();
+}
