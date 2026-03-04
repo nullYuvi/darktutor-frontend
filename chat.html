@@ -5,182 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>DarkTutor Chat</title>
 
+<link rel="stylesheet" href="css/chat.css">
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI;
-}
-
-body{
-height:100vh;
-background:#050510;
-overflow:hidden;
-display:flex;
-justify-content:center;
-align-items:center;
-color:white;
-perspective:1000px;
-}
-
-/* STARFIELD */
-
-canvas{
-position:absolute;
-top:0;
-left:0;
-z-index:0;
-}
-
-/* CHAT PANEL */
-
-.chat{
-width:95%;
-max-width:420px;
-height:90vh;
-background:rgba(20,20,40,.6);
-backdrop-filter:blur(20px);
-border-radius:20px;
-box-shadow:0 0 50px rgba(0,255,255,.2);
-display:flex;
-flex-direction:column;
-overflow:hidden;
-position:relative;
-z-index:2;
-}
-
-/* HEADER */
-
-.header{
-padding:14px;
-display:flex;
-align-items:center;
-gap:10px;
-background:rgba(0,0,0,.3);
-border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-.back{
-cursor:pointer;
-font-size:18px;
-}
-
-.avatar{
-width:34px;
-height:34px;
-border-radius:50%;
-}
-
-.name{
-font-weight:bold;
-}
-
-/* MESSAGE AREA */
-
-.messages{
-flex:1;
-padding:15px;
-overflow-y:auto;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-/* MESSAGE */
-
-.msg{
-max-width:75%;
-padding:10px 14px;
-border-radius:18px;
-animation:fadeUp .3s ease;
-word-wrap:break-word;
-white-space:pre-wrap;
-font-size:14px;
-}
-
-/* SELF */
-
-.self{
-align-self:flex-end;
-background:linear-gradient(135deg,#00f5ff,#0077ff);
-box-shadow:0 0 10px rgba(0,255,255,.4);
-}
-
-/* OTHER */
-
-.other{
-align-self:flex-start;
-background:linear-gradient(135deg,#ff4ecd,#7d2cff);
-box-shadow:0 0 10px rgba(255,0,200,.4);
-}
-
-/* SENDER */
-
-.sender{
-font-size:11px;
-opacity:.7;
-margin-bottom:4px;
-}
-
-/* META */
-
-.meta{
-font-size:10px;
-opacity:.7;
-margin-top:4px;
-display:flex;
-justify-content:flex-end;
-gap:4px;
-}
-
-/* TICKS */
-
-.ticks{
-font-size:11px;
-}
-
-.ticks.sent{color:#aaa;}
-.ticks.delivered{color:#aaa;}
-.ticks.seen{color:#4fc3ff;}
-
-@keyframes fadeUp{
-from{opacity:0;transform:translateY(10px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-/* INPUT */
-
-.input-area{
-display:flex;
-padding:12px;
-gap:10px;
-}
-
-input{
-flex:1;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.1);
-border-radius:25px;
-padding:10px 15px;
-color:white;
-outline:none;
-}
-
-button{
-width:42px;
-height:42px;
-border-radius:50%;
-border:none;
-background:linear-gradient(135deg,#00f5ff,#ff00c8);
-color:white;
-cursor:pointer;
-}
-
-</style>
 </head>
 
 <body>
@@ -189,19 +16,13 @@ cursor:pointer;
 
 <div class="chat">
 
-<!-- HEADER -->
-
 <div class="header">
 <span class="back" onclick="goBack()">←</span>
 <img id="chatAvatar" class="avatar">
 <span id="chatName" class="name"></span>
 </div>
 
-<!-- MESSAGES -->
-
 <div class="messages" id="msgs"></div>
-
-<!-- INPUT -->
 
 <form class="input-area" onsubmit="send(event)">
 <input id="msg" placeholder="Message..." autocomplete="off">
@@ -210,7 +31,7 @@ cursor:pointer;
 
 </div>
 
-<script src="./js/chat.js"></script>
+<script src="js/chat.js"></script>
 
 <script>
 
