@@ -8,7 +8,7 @@ font-family:Segoe UI;
 /* BODY */
 
 body{
-height:100vh;
+height:100dvh;
 background:#050510;
 overflow:hidden;
 color:white;
@@ -33,7 +33,7 @@ position:fixed;
 top:0;
 left:0;
 width:100%;
-height:100vh;
+height:100dvh;
 
 display:flex;
 flex-direction:column;
@@ -79,20 +79,33 @@ font-size:15px;
 flex:1;
 overflow-y:auto;
 padding:12px;
+
 display:flex;
 flex-direction:column;
+
 gap:8px;
+
+min-height:0; /* IMPORTANT */
 }
 
 /* MESSAGE */
 
 .msg{
 max-width:75%;
+
 padding:8px 10px;
+
 border-radius:14px;
+
 font-size:13px;
+
 line-height:1.4;
+
 animation:fadeUp .25s ease;
+
+word-break:break-word;
+overflow-wrap:anywhere;
+white-space:pre-wrap;
 }
 
 /* SELF */
@@ -141,8 +154,14 @@ font-size:10px;
 .ticks.seen{color:#4fc3ff;}
 
 @keyframes fadeUp{
-from{opacity:0;transform:translateY(8px);}
-to{opacity:1;transform:translateY(0);}
+from{
+opacity:0;
+transform:translateY(8px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 /* INPUT AREA */
@@ -153,6 +172,8 @@ padding:10px;
 gap:8px;
 background:#0b0b18;
 border-top:1px solid rgba(255,255,255,.08);
+
+flex-shrink:0; /* IMPORTANT */
 }
 
 .input-area input{
