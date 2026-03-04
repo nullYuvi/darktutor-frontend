@@ -1,17 +1,20 @@
 const API = "https://darktutor-backend.onrender.com";
 
 /* ===== USER DATA ===== */
+
 const me = JSON.parse(localStorage.user || "null");
 const other = JSON.parse(localStorage.chatUser || "null");
 
 if (!me || !other) {
-  location.href = "index.html";
+location.href = "index.html";
 }
 
 /* ===== SOCKET ===== */
+
 const socket = io(API);
 
 /* ===== DOM ===== */
+
 const msgs = document.getElementById("msgs");
 const msgInput = document.getElementById("msg");
 const chatName = document.getElementById("chatName");
@@ -19,175 +22,221 @@ const chatAvatar = document.getElementById("chatAvatar");
 const typingDiv = document.getElementById("typing");
 
 /* ===== HEADER DATA ===== */
+
 chatName.innerText = other.username;
-chatAvatar.src = other.avatar || "https://i.imgur.com/1X6RZ4C.png";
+
+chatAvatar.src =
+other.avatar || "https://i.imgur.com/1X6RZ4C.png";
 
 let chatId = null;
 let typingTimeout = null;
 
 /* ================= INIT ================= */
+
 async function init() {
-  try {
 
-    const r = await fetch(API + "/api/chat/private", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.token
-      },
-      body: JSON.stringify({ userId: other._id })
-    });
+try {
 
-    const chat = await r.json();
-    chatId = chat._id;
+const r = await fetch(API + "/api/chat/private", {
 
-    const m = await fetch(API + "/api/chat/messages/" + chatId, {
-      headers: { Authorization: localStorage.token }
-    });
+method: "POST",
 
-    const list = await m.json();
+headers: {
+"Content-Type": "application/json",
+Authorization: localStorage.token
+},
 
-    list.forEach(renderMsg);
+body: JSON.stringify({ userId: other._id })
 
-    setTimeout(() => {
-      list.forEach(x => {
-        if (x.sender !== me._id) {
-          socket.emit("seenMessage", x._id);
-        }
-      });
-    }, 300);
+});
 
-  } catch (err) {
-    console.error("Init error:", err);
-  }
+const chat = await r.json();
+
+chatId = chat._id;
+
+/* LOAD OLD MESSAGES */
+
+const m = await fetch(API + "/api/chat/messages/" + chatId, {
+
+headers: { Authorization: localStorage.token }
+
+});
+
+const list = await m.json();
+
+list.forEach(renderMsg);
+
+/* MARK SEEN */
+
+setTimeout(() => {
+
+list.forEach(x => {
+
+if (x.sender !== me._id) {
+socket.emit("seenMessage", x._id);
+}
+
+});
+
+}, 300);
+
+} catch (err) {
+
+console.error("Init error:", err);
+
+}
+
 }
 
 init();
 
 /* ================= RENDER MESSAGE ================= */
+
 function renderMsg(m) {
 
-  const d = document.createElement("div");
+const d = document.createElement("div");
 
-  d.className = "msg " + (m.sender === me._id ? "self" : "other");
+d.className = "msg " + (m.sender === me._id ? "self" : "other");
 
-  d.dataset.id = m._id;
+d.dataset.id = m._id;
 
-  /* TIME */
+/* TIME */
 
-  const date = new Date(m.createdAt || Date.now());
+const date = new Date(m.createdAt || Date.now());
 
-  const time =
-    date.getHours() +
-    ":" +
-    String(date.getMinutes()).padStart(2, "0");
+const time =
+date.getHours() +
+":" +
+String(date.getMinutes()).padStart(2, "0");
 
-  /* TICKS */
+/* TICKS */
 
-  let ticks = "";
+let ticks = "";
 
-  if (m.sender === me._id) {
-    ticks = `<span class="ticks ${m.status || "sent"}">✔✔</span>`;
-  }
+if (m.sender === me._id) {
 
-  /* HTML */
+ticks = `<span class="ticks ${m.status || "sent"}">✔✔</span>`;
 
-  d.innerHTML = `
+}
 
-  <div class="sender">
-  ${m.sender === me._id ? "You" : other.username}
-  </div>
+/* MESSAGE HTML */
 
-  <div class="text">${m.text}</div>
+d.innerHTML = `
 
-  <div class="meta">
-  <span>${time}</span>
-  ${ticks}
-  </div>
+<div class="sender">
+${m.sender === me._id ? "You" : other.username}
+</div>
 
-  `;
+<div class="text">${m.text}</div>
 
-  msgs.appendChild(d);
+<div class="meta">
+<span>${time}</span>
+${ticks}
+</div>
 
-  msgs.scrollTop = msgs.scrollHeight;
+`;
+
+/* APPEND */
+
+msgs.appendChild(d);
+
+/* AUTO SCROLL */
+
+msgs.scrollTop = msgs.scrollHeight;
+
 }
 
 /* ================= SEND MESSAGE ================= */
+
 function send(e) {
 
-  if (e) e.preventDefault();
+if (e) e.preventDefault();
 
-  if (!msgInput.value.trim() || !chatId) return;
+if (!msgInput.value.trim() || !chatId) return;
 
-  socket.emit("sendMessage", {
-    chatId,
-    sender: me._id,
-    text: msgInput.value
-  });
+socket.emit("sendMessage", {
 
-  msgInput.value = "";
+chatId,
+sender: me._id,
+text: msgInput.value
+
+});
+
+msgInput.value = "";
+
 }
 
 /* ================= TYPING EMIT ================= */
 
 msgInput.addEventListener("input", () => {
 
-  if (!chatId) return;
+if (!chatId) return;
 
-  socket.emit("typing", {
-    chatId,
-    from: me._id
-  });
+socket.emit("typing", {
+
+chatId,
+from: me._id
+
+});
 
 });
 
 /* ================= SOCKET EVENTS ================= */
 
-// RECEIVE MESSAGE
+/* RECEIVE MESSAGE */
+
 socket.on("newMessage", m => {
 
-  renderMsg(m);
+renderMsg(m);
 
-  if (m.sender !== me._id) {
-    setTimeout(() => {
-      socket.emit("seenMessage", m._id);
-    }, 300);
-  }
+if (m.sender !== me._id) {
+
+setTimeout(() => {
+socket.emit("seenMessage", m._id);
+}, 300);
+
+}
 
 });
 
-// UPDATE TICKS
+/* UPDATE TICKS */
+
 socket.on("messageStatus", data => {
 
-  const el = document.querySelector(
-    `[data-id="${data.id}"] .ticks`
-  );
+const el = document.querySelector(
+`[data-id="${data.id}"] .ticks`
+);
 
-  if (!el) return;
+if (!el) return;
 
-  el.className = "ticks " + data.status;
+el.className = "ticks " + data.status;
 
 });
 
-// SHOW TYPING
+/* TYPING INDICATOR */
+
 socket.on("typing", data => {
 
-  if (data.from === me._id) return;
+if (!typingDiv) return;
 
-  typingDiv.innerText = `${other.username} is typing…`;
+if (data.from === me._id) return;
 
-  typingDiv.classList.add("show");
+typingDiv.innerText = `${other.username} is typing…`;
 
-  clearTimeout(typingTimeout);
+typingDiv.classList.add("show");
 
-  typingTimeout = setTimeout(() => {
-    typingDiv.classList.remove("show");
-  }, 1000);
+clearTimeout(typingTimeout);
+
+typingTimeout = setTimeout(() => {
+
+typingDiv.classList.remove("show");
+
+}, 1000);
 
 });
 
 /* ================= BACK ================= */
 
 function goBack() {
-  history.back();
+history.back();
 }
