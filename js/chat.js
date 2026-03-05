@@ -20,6 +20,7 @@ const msgInput = document.getElementById("msg");
 const chatName = document.getElementById("chatName");
 const chatAvatar = document.getElementById("chatAvatar");
 const typingDiv = document.getElementById("typing");
+const status = document.getElementById("status");
 
 /* ===== HEADER DATA ===== */
 
@@ -27,6 +28,10 @@ chatName.innerText = other.username;
 
 chatAvatar.src =
 other.avatar || "https://i.imgur.com/1X6RZ4C.png";
+
+/* ===== USER ONLINE ===== */
+
+socket.emit("userOnline", me._id);
 
 let chatId = null;
 let typingTimeout = null;
@@ -115,7 +120,7 @@ let ticks = "";
 
 if (m.sender === me._id) {
 
-ticks = `<span class="ticks ${m.status || "sent"}">✔✔</span>`;
+ticks = "<span class="ticks ${m.status || "sent"}">✔✔</span>";
 
 }
 
@@ -125,16 +130,10 @@ d.innerHTML = `
 
 <div class="sender">
 ${m.sender === me._id ? "You" : other.username}
-</div>
-
-<div class="text">${m.text}</div>
-
-<div class="meta">
+</div><div class="text">${m.text}</div><div class="meta">
 <span>${time}</span>
 ${ticks}
-</div>
-
-`;
+</div>`;
 
 /* APPEND */
 
@@ -204,7 +203,7 @@ socket.emit("seenMessage", m._id);
 socket.on("messageStatus", data => {
 
 const el = document.querySelector(
-`[data-id="${data.id}"] .ticks`
+"[data-id="${data.id}"] .ticks"
 );
 
 if (!el) return;
@@ -221,7 +220,7 @@ if (!typingDiv) return;
 
 if (data.from === me._id) return;
 
-typingDiv.innerText = `${other.username} is typing…`;
+typingDiv.innerText = "${other.username} is typing…";
 
 typingDiv.classList.add("show");
 
@@ -232,6 +231,26 @@ typingTimeout = setTimeout(() => {
 typingDiv.classList.remove("show");
 
 }, 1000);
+
+});
+
+/* USER STATUS UPDATE */
+
+socket.on("userStatus", data => {
+
+if (!status) return;
+
+if (data.userId !== other._id) return;
+
+if (data.online) {
+
+status.innerText = "● online";
+
+} else {
+
+status.innerText = "last seen just now";
+
+}
 
 });
 
