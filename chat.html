@@ -1,50 +1,15 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 
-<title>DarkTutor Chat</title>
+<title>DarkTutor Chat</title><link rel="stylesheet" href="css/chat.css"><script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script></head><body><!-- STAR BACKGROUND --><canvas id="stars"></canvas>
 
-<link rel="stylesheet" href="css/chat.css">
+<div class="chat"><!-- HEADER --><div class="header"><span class="back" onclick="goBack()">←</span>
 
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<img id="chatAvatar" class="avatar"><div class="name"><span id="chatName"></span>
 
-</head>
+<span class="online">● online</span>
 
-<body>
-
-<!-- STAR BACKGROUND -->
-
-<canvas id="stars"></canvas>
-
-<div class="chat">
-
-<!-- HEADER -->
-
-<div class="header">
-
-<span class="back" onclick="goBack()">←</span>
-
-<img id="chatAvatar" class="avatar">
-
-<span id="chatName" class="name"></span>
-
-</div>
-
-<!-- MESSAGES -->
-
-<div id="msgs" class="messages"></div>
-
-<!-- INPUT -->
-
-<form class="input-area" onsubmit="send(event)">
-
-<input
+</div></div><!-- TYPING INDICATOR --><div id="typing" class="typing"></div><!-- MESSAGES --><div id="msgs" class="messages"></div><!-- INPUT --><form class="input-area" onsubmit="send(event)"><input
 id="msg"
 placeholder="Message..."
 autocomplete="off"
@@ -54,22 +19,14 @@ enterkeyhint="send"
 
 <button type="submit">➤</button>
 
-</form>
-
-</div>
-
-<script src="js/chat.js"></script>
-
-<script>
+</form></div><script src="js/chat.js"></script><script>
 
 /* STARFIELD BACKGROUND */
 
 const canvas=document.getElementById("stars");
-
 const ctx=canvas.getContext("2d");
 
 canvas.width=window.innerWidth;
-
 canvas.height=window.innerHeight;
 
 let stars=[];
@@ -79,9 +36,7 @@ for(let i=0;i<140;i++){
 stars.push({
 
 x:Math.random()*canvas.width - canvas.width/2,
-
 y:Math.random()*canvas.height - canvas.height/2,
-
 z:Math.random()*canvas.width
 
 });
@@ -91,7 +46,6 @@ z:Math.random()*canvas.width
 function animate(){
 
 ctx.fillStyle="black";
-
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
 for(let s of stars){
@@ -103,13 +57,11 @@ if(s.z<=0) s.z=canvas.width;
 let k=128/s.z;
 
 let px=s.x*k+canvas.width/2;
-
 let py=s.y*k+canvas.height/2;
 
 if(px>=0 && px<=canvas.width && py>=0 && py<=canvas.height){
 
 ctx.fillStyle="white";
-
 ctx.fillRect(px,py,2,2);
 
 }
@@ -122,8 +74,5 @@ requestAnimationFrame(animate);
 
 animate();
 
-</script>
-
-</body>
-
+</script></body>
 </html>
