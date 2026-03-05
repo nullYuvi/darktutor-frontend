@@ -23,13 +23,13 @@ enterkeyhint="send"
 
 /* STARFIELD BACKGROUND */
 
-const canvas=document.getElementById("stars");
-const ctx=canvas.getContext("2d");
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
 
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-let stars=[];
+let stars = [];
 
 for(let i=0;i<140;i++){
 
@@ -50,14 +50,14 @@ ctx.fillRect(0,0,canvas.width,canvas.height);
 
 for(let s of stars){
 
-s.z-=2;
+s.z -= 2;
 
-if(s.z<=0) s.z=canvas.width;
+if(s.z <= 0) s.z = canvas.width;
 
-let k=128/s.z;
+let k = 128 / s.z;
 
-let px=s.x*k+canvas.width/2;
-let py=s.y*k+canvas.height/2;
+let px = s.x*k + canvas.width/2;
+let py = s.y*k + canvas.height/2;
 
 if(px>=0 && px<=canvas.width && py>=0 && py<=canvas.height){
 
