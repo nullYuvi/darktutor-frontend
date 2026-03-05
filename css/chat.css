@@ -2,7 +2,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI;
+font-family:Segoe UI,system-ui,sans-serif;
 }
 
 /* BODY */
@@ -26,19 +26,20 @@ z-index:0;
 pointer-events:none;
 }
 
-/* CHAT */
+/* CHAT CONTAINER */
 
 .chat{
 position:fixed;
 top:0;
 left:0;
+
 width:100%;
 height:100dvh;
 
 display:flex;
 flex-direction:column;
 
-background:rgba(10,10,25,.7);
+background:rgba(10,10,25,.75);
 backdrop-filter:blur(20px);
 
 z-index:2;
@@ -47,6 +48,7 @@ z-index:2;
 /* HEADER */
 
 .header{
+
 height:60px;
 
 display:flex;
@@ -61,27 +63,31 @@ background:#0b0b18;
 border-bottom:1px solid rgba(255,255,255,.08);
 
 flex-shrink:0;
+
 }
 
 .back{
 cursor:pointer;
-font-size:18px;
+font-size:20px;
 }
 
 .avatar{
 width:36px;
 height:36px;
 border-radius:50%;
+object-fit:cover;
 }
 
 .name{
 font-weight:600;
 font-size:15px;
+letter-spacing:.2px;
 }
 
 /* MESSAGE AREA */
 
 .messages{
+
 flex:1;
 
 overflow-y:auto;
@@ -95,18 +101,19 @@ gap:10px;
 
 min-height:0;
 
-align-items:flex-start;
-
 scroll-behavior:smooth;
+
 }
 
-/* MESSAGE */
+/* MESSAGE BUBBLE */
 
 .msg{
 
 display:inline-block;
 
 max-width:75%;
+
+width:fit-content;
 
 min-width:60px;
 
@@ -116,11 +123,13 @@ border-radius:16px;
 
 font-size:14px;
 
-line-height:1.4;
+line-height:1.45;
 
 word-break:break-word;
 overflow-wrap:anywhere;
 white-space:pre-wrap;
+
+word-wrap:break-word;
 
 animation:msgIn .25s ease;
 
@@ -200,7 +209,7 @@ margin-bottom:4px;
 
 }
 
-/* META (TIME + TICKS) */
+/* MESSAGE META */
 
 .meta{
 
@@ -214,7 +223,9 @@ display:flex;
 
 justify-content:flex-end;
 
-gap:5px;
+gap:6px;
+
+align-items:center;
 
 }
 
@@ -225,7 +236,9 @@ font-size:11px;
 }
 
 .ticks.sent{color:#aaa;}
+
 .ticks.delivered{color:#aaa;}
+
 .ticks.seen{color:#4fc3ff;}
 
 /* INPUT AREA */
@@ -246,7 +259,7 @@ flex-shrink:0;
 
 }
 
-/* INPUT */
+/* MESSAGE INPUT */
 
 .input-area input{
 
@@ -265,6 +278,14 @@ color:white;
 font-size:16px;
 
 outline:none;
+
+transition:.2s;
+
+}
+
+.input-area input:focus{
+
+border-color:#00f5ff;
 
 }
 
@@ -287,7 +308,17 @@ cursor:pointer;
 
 font-size:16px;
 
+display:flex;
+align-items:center;
+justify-content:center;
+
 transition:.2s;
+
+}
+
+.input-area button:hover{
+
+box-shadow:0 0 10px #00f5ff;
 
 }
 
@@ -301,6 +332,10 @@ transform:scale(.9);
 
 .messages::-webkit-scrollbar{
 width:4px;
+}
+
+.messages::-webkit-scrollbar-track{
+background:transparent;
 }
 
 .messages::-webkit-scrollbar-thumb{
