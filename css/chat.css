@@ -5,11 +5,13 @@ box-sizing:border-box;
 font-family:system-ui,Segoe UI;
 }
 
+/* BODY */
+
 body{
 background:#050510;
-height:100dvh;
+min-height:100vh;
 color:white;
-overflow:hidden;
+overflow:auto;
 }
 
 /* CHAT */
@@ -17,7 +19,8 @@ overflow:hidden;
 .chat{
 display:flex;
 flex-direction:column;
-height:100dvh;
+min-height:100vh;
+height:100%;
 }
 
 /* HEADER */
@@ -74,7 +77,6 @@ padding:16px;
 display:flex;
 flex-direction:column;
 gap:10px;
-min-height:0;
 scroll-behavior:smooth;
 }
 
@@ -119,17 +121,17 @@ justify-content:flex-end;
 gap:4px;
 }
 
-/* INPUT */
+/* INPUT AREA */
 
 .input-area{
-position:sticky;
-bottom:0;
 display:flex;
 gap:10px;
 padding:10px;
 background:#0b0b1c;
 border-top:1px solid rgba(255,255,255,.07);
 }
+
+/* INPUT */
 
 .input-area input{
 flex:1;
@@ -139,7 +141,10 @@ border:none;
 background:#111;
 color:white;
 font-size:14px;
+outline:none;
 }
+
+/* SEND BUTTON */
 
 .input-area button{
 width:40px;
