@@ -1,15 +1,27 @@
-const API="https://darktutor-backend.onrender.com";
+const API = "https://darktutor-backend.onrender.com";
 
-const me=JSON.parse(localStorage.user||"null");
+/* USER DATA */
 
-if(!me) location.href="login.html";
+const me = JSON.parse(localStorage.user || "null");
 
-document.getElementById("myUsername").innerText=me.username;
+if (!me) location.href = "login.html";
 
-const onlineUsers=document.getElementById("onlineUsers");
-const allUsers=document.getElementById("allUsers");
-const recentChats=document.getElementById("recentChats");
-const search=document.getElementById("search");
+document.getElementById("myUsername").innerText = me.username;
+
+/* SOCKET */
+
+const socket = io(API);
+
+/* DOM */
+
+const onlineUsers = document.getElementById("onlineUsers");
+const allUsers = document.getElementById("allUsers");
+const recentChats = document.getElementById("recentChats");
+const search = document.getElementById("search");
+
+/* USER ONLINE */
+
+socket.emit("userOnline", me._id);
 
 /* LOAD DATA */
 
@@ -20,13 +32,21 @@ loadRecent();
 
 async function loadUsers(){
 
-const r=await fetch(API+"/api/chat/users",{
-headers:{Authorization:localStorage.token}
+try{
+
+const r = await fetch(API + "/api/chat/users",{
+headers:{ Authorization: localStorage.token }
 });
 
-const users=await r.json();
+const users = await r.json();
 
 renderUsers(users);
+
+}catch(err){
+
+console.error("Users load error",err);
+
+}
 
 }
 
@@ -34,27 +54,29 @@ renderUsers(users);
 
 async function loadRecent(){
 
-const r=await fetch(API+"/api/chat/recent",{
-headers:{Authorization:localStorage.token}
+try{
+
+const r = await fetch(API + "/api/chat/recent",{
+headers:{ Authorization: localStorage.token }
 });
 
-const chats=await r.json();
+const chats = await r.json();
 
-recentChats.innerHTML="";
+recentChats.innerHTML = "";
 
 chats.forEach(c=>{
 
-const d=document.createElement("div");
+const d = document.createElement("div");
 
-d.className="chat-item";
+d.className = "chat-item";
 
-const time=new Date(c.time)
+const time = new Date(c.time)
 .toLocaleTimeString([],{
 hour:"2-digit",
 minute:"2-digit"
 });
 
-d.innerHTML=`
+d.innerHTML = `
 
 <img class="avatar" src="${c.user.avatar}">
 
@@ -72,11 +94,17 @@ ${c.lastMessage || "Start conversation"}
 
 `;
 
-d.onclick=()=>openChat(c.user);
+d.onclick = ()=>openChat(c.user);
 
 recentChats.appendChild(d);
 
 });
+
+}catch(err){
+
+console.error("Recent chat error",err);
+
+}
 
 }
 
@@ -89,20 +117,20 @@ allUsers.innerHTML="";
 
 users.forEach(u=>{
 
-/* ONLINE */
+/* ONLINE USERS */
 
 if(u.online){
 
-const d=document.createElement("div");
+const d = document.createElement("div");
 
-d.className="online-user";
+d.className = "online-user";
 
-d.innerHTML=`
+d.innerHTML = `
 <img src="${u.avatar}">
 <span>${u.username}</span>
 `;
 
-d.onclick=()=>openChat(u);
+d.onclick = ()=>openChat(u);
 
 onlineUsers.appendChild(d);
 
@@ -110,11 +138,11 @@ onlineUsers.appendChild(d);
 
 /* ALL USERS */
 
-const d=document.createElement("div");
+const d = document.createElement("div");
 
-d.className="chat-item";
+d.className = "chat-item";
 
-d.innerHTML=`
+d.innerHTML = `
 
 <img class="avatar" src="${u.avatar}">
 
@@ -127,7 +155,7 @@ d.innerHTML=`
 
 `;
 
-d.onclick=()=>openChat(u);
+d.onclick = ()=>openChat(u);
 
 allUsers.appendChild(d);
 
@@ -139,12 +167,14 @@ allUsers.appendChild(d);
 
 search.addEventListener("input",()=>{
 
-const q=search.value.toLowerCase();
+const q = search.value.toLowerCase();
 
 document.querySelectorAll(".chat-item").forEach(i=>{
 
-i.style.display=i.innerText.toLowerCase().includes(q)
-?"flex":"none";
+i.style.display =
+i.innerText.toLowerCase().includes(q)
+? "flex"
+: "none";
 
 });
 
@@ -156,7 +186,7 @@ function openChat(user){
 
 localStorage.setItem("chatUser",JSON.stringify(user));
 
-location.href="chat.html";
+location.href = "chat.html";
 
 }
 
@@ -166,6 +196,22 @@ function logout(){
 
 localStorage.clear();
 
-location.href="login.html";
+location.href = "login.html";
 
 }
+
+/* REALTIME UPDATE */
+
+socket.on("recentUpdate",()=>{
+
+loadRecent();
+
+});
+
+/* ONLINE STATUS UPDATE */
+
+socket.on("userStatus",()=>{
+
+loadUsers();
+
+});
