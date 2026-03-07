@@ -84,9 +84,13 @@ opacity:.7;
 .messages{
 flex:1;
 overflow-y:auto;
+
 padding:16px;
+padding-bottom:90px; /* 👈 IMPORTANT FIX */
+
 display:flex;
 flex-direction:column;
+
 gap:10px;
 
 scroll-behavior:smooth;
