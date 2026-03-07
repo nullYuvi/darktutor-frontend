@@ -1,133 +1,134 @@
-const API="https://darktutor-backend.onrender.com"
+const API = "https://darktutor-backend.onrender.com";
 
-/* USER */
+/* USER DATA */
 
-const me=JSON.parse(localStorage.user||"null")
+const token = localStorage.getItem("token");
+const me = JSON.parse(localStorage.getItem("user") || "null");
 
-if(!me) location.href="login.html"
-
-/* SOCKET */
-
-const socket=io(API)
+if (!token || !me) {
+  location.href = "login.html";
+}
 
 /* DOM */
 
-const chatList=document.getElementById("chatList")
-const search=document.getElementById("search")
+const onlineDiv = document.getElementById("onlineUsers");
+const allDiv = document.getElementById("allUsers");
+const search = document.getElementById("search");
 
-let chats=[]
+let users = [];
 
-/* USER ONLINE */
+/* LOAD USERS */
 
-socket.emit("userOnline",me._id)
+async function loadUsers() {
 
-/* LOAD CHATS */
+  try {
 
-async function loadChats(){
+    const res = await fetch(API + "/api/chat/users", {
+      headers: {
+        Authorization: token
+      }
+    });
 
-try{
+    users = await res.json();
 
-const res=await fetch(API+"/api/chat",{
-headers:{
-Authorization:localStorage.token
-}
-})
+    renderUsers(users);
 
-chats=await res.json()
+  } catch (err) {
 
-renderChats(chats)
+    console.log("Users load error:", err);
 
-}catch(err){
-
-console.log("chat load error",err)
-
-}
+  }
 
 }
 
-loadChats()
+loadUsers();
 
-/* RENDER CHATS */
+/* RENDER USERS */
 
-function renderChats(list){
+function renderUsers(list) {
 
-chatList.innerHTML=""
+  onlineDiv.innerHTML = "";
+  allDiv.innerHTML = "";
 
-list.forEach(c=>{
+  list.forEach(u => {
 
-const div=document.createElement("div")
+    if (u._id === me._id) return;
 
-div.className="chat-item"
+    const card = document.createElement("div");
 
-div.innerHTML=`
+    card.className = "user";
 
-<div style="position:relative">
+    card.innerHTML = `
+      <img class="avatar"
+      src="${u.avatar || "https://i.imgur.com/1X6RZ4C.png"}">
 
-<img class="avatar"
-src="${c.avatar||"https://i.imgur.com/1X6RZ4C.png"}">
+      <div class="name">${u.username}</div>
+    `;
 
-${c.online?'<div class="online-dot"></div>':''}
+    card.onclick = () => openChat(u);
 
-</div>
+    if (u.online) {
+      onlineDiv.appendChild(card);
+    }
 
-<div class="chat-info">
+    allDiv.appendChild(card);
 
-<div class="username">${c.username}</div>
-
-<div class="last-msg">${c.lastMessage||""}</div>
-
-</div>
-
-<div class="right">
-
-<div class="time">${c.time||""}</div>
-
-${c.unread?`<div class="unread">${c.unread}</div>`:""}
-
-</div>
-
-`
-
-div.onclick=()=>{
-
-localStorage.chatUser=JSON.stringify(c)
-
-location.href="chat.html"
+  });
 
 }
 
-chatList.appendChild(div)
+/* OPEN CHAT */
 
-})
+async function openChat(user) {
+
+  try {
+
+    const res = await fetch(API + "/api/chat/private", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      },
+      body: JSON.stringify({
+        userId: user._id
+      })
+    });
+
+    const chat = await res.json();
+
+    localStorage.setItem("chatUser", JSON.stringify(user));
+    localStorage.setItem("chatId", chat._id);
+
+    location.href = "chat.html";
+
+  } catch (err) {
+
+    console.log("Open chat error:", err);
+
+  }
 
 }
 
 /* SEARCH */
 
-search.addEventListener("input",()=>{
+search.addEventListener("input", () => {
 
-const q=search.value.toLowerCase()
+  const q = search.value.toLowerCase();
 
-const filtered=chats.filter(c=>
-c.username.toLowerCase().includes(q)
-)
+  const filtered = users.filter(u =>
+    u.username.toLowerCase().includes(q)
+  );
 
-renderChats(filtered)
+  renderUsers(filtered);
 
-})
+});
 
-/* NEW CHAT */
+/* LOGOUT */
 
-function newChat(){
+function logout() {
 
-location.href="users.html"
+  localStorage.clear();
+
+  location.href = "login.html";
 
 }
-
-/* REALTIME UPDATE */
-
-socket.on("newMessage",(data)=>{
-
-loadChats()
-
-})
