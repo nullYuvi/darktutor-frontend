@@ -12,27 +12,51 @@ height:100vh;
 overflow:auto;
 }
 
-/* TOPBAR */
-
-.topbar{
-height:60px;
+.app{
 display:flex;
-align-items:center;
+flex-direction:column;
+height:100vh;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
 justify-content:space-between;
-padding:0 14px;
+align-items:center;
+padding:14px;
 background:#0b0b1c;
 border-bottom:1px solid rgba(255,255,255,.07);
 }
 
-.title{
+.logo{
 font-size:18px;
 font-weight:600;
+}
+
+.myname{
+font-size:13px;
+opacity:.7;
+}
+
+.right{
+display:flex;
+gap:8px;
 }
 
 .logout{
 background:#ff2f7a;
 border:none;
-padding:6px 12px;
+padding:7px 10px;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+.profileBtn{
+background:#222;
+border:none;
+padding:7px 10px;
 border-radius:6px;
 color:white;
 cursor:pointer;
@@ -51,48 +75,105 @@ border-radius:20px;
 border:none;
 background:#111;
 color:white;
-font-size:14px;
-outline:none;
 }
 
 /* SECTION */
 
 .section{
-padding:10px 14px;
+padding:10px;
 }
 
-.section h4{
-margin-bottom:8px;
+.section h3{
 font-size:14px;
+opacity:.8;
+margin-bottom:8px;
+}
+
+/* ONLINE USERS */
+
+.online-scroll{
+display:flex;
+gap:14px;
+overflow-x:auto;
+padding:10px 4px;
+}
+
+.online-user{
+flex:0 0 auto;
+text-align:center;
+width:70px;
+}
+
+.online-user img{
+width:60px;
+height:60px;
+border-radius:12px;
+object-fit:cover;
+border:2px solid #22c55e;
+}
+
+.online-user span{
+display:block;
+font-size:11px;
+margin-top:6px;
 opacity:.8;
 }
 
-/* USER CARD */
-
-.user{
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-background:#0b0b1c;
-margin-bottom:8px;
-transition:.2s;
+.online-scroll::-webkit-scrollbar{
+display:none;
 }
 
-.user:hover{
-background:#15152a;
+/* CHAT LIST */
+
+.chat-list{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.chat-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:10px;
+border-radius:10px;
+background:#0b0b1c;
+cursor:pointer;
+}
+
+.chat-item:hover{
+background:#14142a;
 }
 
 .avatar{
-width:40px;
-height:40px;
+width:42px;
+height:42px;
 border-radius:50%;
 object-fit:cover;
 }
 
-.name{
+.chat-info{
+flex:1;
+}
+
+.username{
 font-size:14px;
-font-weight:500;
+font-weight:600;
+}
+
+.last-msg{
+font-size:12px;
+opacity:.7;
+}
+
+.time{
+font-size:11px;
+opacity:.6;
+}
+
+.unread{
+background:#ff2f7a;
+padding:3px 7px;
+border-radius:10px;
+font-size:11px;
 }
