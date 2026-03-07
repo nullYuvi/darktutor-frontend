@@ -27,7 +27,7 @@ async function loadChats(){
 
 try{
 
-const res=await fetch(API+"/api/chat/list",{
+const res=await fetch(API+"/api/chat",{
 headers:{
 Authorization:localStorage.token
 }
