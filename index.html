@@ -10,32 +10,44 @@ content="width=device-width,initial-scale=1">
 
 <title>DarkTutor</title>
 
-<link rel="stylesheet" href="css/index.css">
-
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<link rel="stylesheet" href="./css/index.css">
 
 </head>
 
 <body>
 
-<div class="app">
+<header class="topbar">
 
-<header class="header">
+<span class="title">DarkTutor</span>
 
-<div class="logo">DarkTutor</div>
-
-<input id="search"
-placeholder="Search users or chats">
+<button class="logout" onclick="logout()">Logout</button>
 
 </header>
 
-<div id="chatList" class="chat-list"></div>
+<div class="searchBox">
 
-<button class="new-chat" onclick="newChat()">+</button>
+<input id="search"
+placeholder="Search username...">
 
 </div>
 
-<script src="js/index.js"></script>
+<div class="section">
+
+<h4>🟢 Online Users</h4>
+
+<div id="onlineUsers"></div>
+
+</div>
+
+<div class="section">
+
+<h4>👥 All Users</h4>
+
+<div id="allUsers"></div>
+
+</div>
+
+<script src="./js/index.js"></script>
 
 </body>
 
