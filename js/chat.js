@@ -100,9 +100,7 @@ String(date.getMinutes()).padStart(2,"0");
 let ticks = "";
 
 if(m.sender === me._id){
-
 ticks = "✔✔";
-
 }
 
 /* MESSAGE HTML */
@@ -114,7 +112,7 @@ d.innerHTML = `
 
 msgs.appendChild(d);
 
-/* SCROLL */
+/* AUTO SCROLL */
 
 msgs.scrollTop = msgs.scrollHeight;
 
@@ -126,14 +124,15 @@ function send(e){
 
 if(e) e.preventDefault();
 
-if(!msgInput.value.trim()) return;
+const text = msgInput.value.trim();
 
+if(!text) return;
 if(!chatId) return;
 
 socket.emit("sendMessage",{
 chatId:chatId,
 sender:me._id,
-text:msgInput.value
+text:text
 });
 
 msgInput.value="";
@@ -165,6 +164,7 @@ renderMsg(m);
 
 socket.on("typing",data=>{
 
+if(!data) return;
 if(data.from === me._id) return;
 
 status.innerText = "typing...";
@@ -183,6 +183,7 @@ status.innerText = "online";
 
 socket.on("userStatus",data=>{
 
+if(!data) return;
 if(data.userId !== other._id) return;
 
 status.innerText = data.online ? "online" : "offline";
@@ -204,10 +205,22 @@ behavior:"smooth"
 
 });
 
+/* NEW MESSAGE KEYBOARD FIX */
+
+msgInput.addEventListener("keydown",(e)=>{
+
+if(e.key === "Enter"){
+
+setTimeout(()=>{
+msgs.scrollTop = msgs.scrollHeight;
+},100);
+
+}
+
+});
+
 /* BACK BUTTON */
 
 function goBack(){
-
 history.back();
-
 }
