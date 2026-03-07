@@ -11,7 +11,12 @@ const allUsers=document.getElementById("allUsers");
 const recentChats=document.getElementById("recentChats");
 const search=document.getElementById("search");
 
-/* LOAD USERS */
+/* LOAD DATA */
+
+loadUsers();
+loadRecent();
+
+/* USERS */
 
 async function loadUsers(){
 
@@ -25,7 +30,55 @@ renderUsers(users);
 
 }
 
-loadUsers();
+/* RECENT CHATS */
+
+async function loadRecent(){
+
+const r=await fetch(API+"/api/chat/recent",{
+headers:{Authorization:localStorage.token}
+});
+
+const chats=await r.json();
+
+recentChats.innerHTML="";
+
+chats.forEach(c=>{
+
+const d=document.createElement("div");
+
+d.className="chat-item";
+
+const time=new Date(c.time)
+.toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
+
+d.innerHTML=`
+
+<img class="avatar" src="${c.user.avatar}">
+
+<div class="chat-info">
+
+<div class="username">${c.user.username}</div>
+
+<div class="last-msg">
+${c.lastMessage || "Start conversation"}
+</div>
+
+</div>
+
+<div class="time">${time}</div>
+
+`;
+
+d.onclick=()=>openChat(c.user);
+
+recentChats.appendChild(d);
+
+});
+
+}
 
 /* RENDER USERS */
 
