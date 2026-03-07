@@ -1,47 +1,133 @@
-const API = "https://darktutor-backend.onrender.com";
-const token = localStorage.token;
-const me = JSON.parse(localStorage.user || "null");
+const API="https://darktutor-backend.onrender.com"
 
-if (!token || !me) location = "login.html";
+/* USER */
 
-function logout() {
-  localStorage.clear();
-  location = "login.html";
+const me=JSON.parse(localStorage.user||"null")
+
+if(!me) location.href="login.html"
+
+/* SOCKET */
+
+const socket=io(API)
+
+/* DOM */
+
+const chatList=document.getElementById("chatList")
+const search=document.getElementById("search")
+
+let chats=[]
+
+/* USER ONLINE */
+
+socket.emit("userOnline",me._id)
+
+/* LOAD CHATS */
+
+async function loadChats(){
+
+try{
+
+const res=await fetch(API+"/api/chat/list",{
+headers:{
+Authorization:localStorage.token
+}
+})
+
+chats=await res.json()
+
+renderChats(chats)
+
+}catch(err){
+
+console.log("chat load error",err)
+
 }
 
-let usersList = [];
-
-async function loadUsers() {
-  const res = await fetch(API + "/api/chat/users", {
-    headers: { Authorization: token }
-  });
-  usersList = await res.json();
-  render(usersList);
 }
 
-function render(list) {
-  onlineUsers.innerHTML = "";
-  allUsers.innerHTML = "";
+loadChats()
 
-  list.forEach(u => {
-    const div = document.createElement("div");
-    div.className = "user";
-    div.innerText = u.username;
-    div.onclick = () => {
-      localStorage.chatUser = JSON.stringify(u);
-      location = "chat.html";
-    };
+/* RENDER CHATS */
 
-    if (u.online) onlineUsers.appendChild(div.cloneNode(true));
-    allUsers.appendChild(div);
-  });
+function renderChats(list){
+
+chatList.innerHTML=""
+
+list.forEach(c=>{
+
+const div=document.createElement("div")
+
+div.className="chat-item"
+
+div.innerHTML=`
+
+<div style="position:relative">
+
+<img class="avatar"
+src="${c.avatar||"https://i.imgur.com/1X6RZ4C.png"}">
+
+${c.online?'<div class="online-dot"></div>':''}
+
+</div>
+
+<div class="chat-info">
+
+<div class="username">${c.username}</div>
+
+<div class="last-msg">${c.lastMessage||""}</div>
+
+</div>
+
+<div class="right">
+
+<div class="time">${c.time||""}</div>
+
+${c.unread?`<div class="unread">${c.unread}</div>`:""}
+
+</div>
+
+`
+
+div.onclick=()=>{
+
+localStorage.chatUser=JSON.stringify(c)
+
+location.href="chat.html"
+
 }
 
-search.oninput = () => {
-  const q = search.value.toLowerCase();
-  render(usersList.filter(u =>
-    u.username.toLowerCase().includes(q)
-  ));
-};
+chatList.appendChild(div)
 
-loadUsers();
+})
+
+}
+
+/* SEARCH */
+
+search.addEventListener("input",()=>{
+
+const q=search.value.toLowerCase()
+
+const filtered=chats.filter(c=>
+c.username.toLowerCase().includes(q)
+)
+
+renderChats(filtered)
+
+})
+
+/* NEW CHAT */
+
+function newChat(){
+
+location.href="users.html"
+
+}
+
+/* REALTIME UPDATE */
+
+socket.on("newMessage",(data)=>{
+
+loadChats()
+
+})
