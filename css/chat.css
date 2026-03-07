@@ -9,17 +9,20 @@ font-family:system-ui,Segoe UI;
 
 body{
 background:#050510;
-height:100dvh;
+height:100vh;
 color:white;
 overflow:hidden;
+display:flex;
+flex-direction:column;
 }
 
 /* CHAT CONTAINER */
 
 .chat{
+flex:1;
 display:flex;
 flex-direction:column;
-height:100dvh;
+min-height:0;
 }
 
 /* HEADER */
@@ -39,6 +42,8 @@ padding:0 14px;
 background:#0b0b1c;
 
 border-bottom:1px solid rgba(255,255,255,.07);
+
+flex-shrink:0;
 }
 
 .left{
@@ -78,54 +83,41 @@ opacity:.7;
 
 .messages{
 flex:1;
-
 overflow-y:auto;
-
 padding:16px;
-
 display:flex;
 flex-direction:column;
-
 gap:10px;
 
 scroll-behavior:smooth;
 
 -webkit-overflow-scrolling:touch;
+
+min-height:0;
 }
 
 /* MESSAGE */
 
 .msg{
 max-width:72%;
-
 padding:10px 13px;
-
 border-radius:18px;
-
 font-size:14px;
-
 line-height:1.4;
-
 width:fit-content;
-
 word-break:break-word;
-
 animation:msg .2s ease;
 }
 
 .self{
 align-self:flex-end;
-
 background:linear-gradient(135deg,#00eaff,#0066ff);
-
 border-bottom-right-radius:6px;
 }
 
 .other{
 align-self:flex-start;
-
 background:linear-gradient(135deg,#ff2fcf,#7b2cff);
-
 border-bottom-left-radius:6px;
 }
 
@@ -133,15 +125,10 @@ border-bottom-left-radius:6px;
 
 .meta{
 font-size:10px;
-
 opacity:.7;
-
 margin-top:4px;
-
 display:flex;
-
 justify-content:flex-end;
-
 gap:4px;
 }
 
@@ -149,11 +136,9 @@ gap:4px;
 
 .input-area{
 position:sticky;
-
 bottom:0;
 
 display:flex;
-
 gap:10px;
 
 padding:10px;
@@ -161,6 +146,8 @@ padding:10px;
 background:#0b0b1c;
 
 border-top:1px solid rgba(255,255,255,.07);
+
+flex-shrink:0;
 }
 
 /* INPUT */
@@ -187,7 +174,6 @@ outline:none;
 
 .input-area button{
 width:40px;
-
 height:40px;
 
 border-radius:50%;
