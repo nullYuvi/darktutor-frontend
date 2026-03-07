@@ -1,31 +1,47 @@
-const API="https://darktutor-backend.onrender.com";
+const API = "https://darktutor-backend.onrender.com";
 
-const me=JSON.parse(localStorage.user||"null");
-const other=JSON.parse(localStorage.chatUser||"null");
+/* USER DATA */
 
-if(!me||!other) location.href="index.html";
+const me = JSON.parse(localStorage.user || "null");
+const other = JSON.parse(localStorage.chatUser || "null");
 
-const socket=io(API);
+if (!me || !other) location.href = "index.html";
 
-const msgs=document.getElementById("msgs");
-const msgInput=document.getElementById("msg");
-const chatName=document.getElementById("chatName");
-const chatAvatar=document.getElementById("chatAvatar");
-const status=document.getElementById("status");
+/* SOCKET */
 
-chatName.innerText=other.username;
+const socket = io(API);
 
-chatAvatar.src=
-other.avatar||"https://i.imgur.com/1X6RZ4C.png";
+/* DOM */
 
-let chatId=null;
-let typingTimeout=null;
+const msgs = document.getElementById("msgs");
+const msgInput = document.getElementById("msg");
+const chatName = document.getElementById("chatName");
+const chatAvatar = document.getElementById("chatAvatar");
+const status = document.getElementById("status");
 
-socket.emit("userOnline",me._id);
+/* HEADER DATA */
+
+chatName.innerText = other.username;
+
+chatAvatar.src =
+other.avatar || "https://i.imgur.com/1X6RZ4C.png";
+
+/* VARIABLES */
+
+let chatId = null;
+let typingTimeout = null;
+
+/* USER ONLINE */
+
+socket.emit("userOnline", me._id);
+
+/* INIT */
 
 async function init(){
 
-const r=await fetch(API+"/api/chat/private",{
+try{
+
+const r = await fetch(API + "/api/chat/private", {
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -34,17 +50,29 @@ Authorization:localStorage.token
 body:JSON.stringify({userId:other._id})
 });
 
-const chat=await r.json();
+const chat = await r.json();
 
-chatId=chat._id;
+chatId = chat._id;
 
-const m=await fetch(API+"/api/chat/messages/"+chatId,{
+/* LOAD OLD MESSAGES */
+
+const m = await fetch(API + "/api/chat/messages/" + chatId,{
 headers:{Authorization:localStorage.token}
 });
 
-const list=await m.json();
+const list = await m.json();
 
 list.forEach(renderMsg);
+
+/* AUTO SCROLL */
+
+msgs.scrollTop = msgs.scrollHeight;
+
+}catch(err){
+
+console.error("Chat init error:",err);
+
+}
 
 }
 
@@ -54,40 +82,56 @@ init();
 
 function renderMsg(m){
 
-const d=document.createElement("div");
+const d = document.createElement("div");
 
-d.className="msg "+(m.sender===me._id?"self":"other");
+d.className = "msg " + (m.sender === me._id ? "self" : "other");
 
-const date=new Date(m.createdAt||Date.now());
+/* TIME */
 
-const time=date.getHours()+":"+
+const date = new Date(m.createdAt || Date.now());
+
+const time =
+date.getHours() +
+":" +
 String(date.getMinutes()).padStart(2,"0");
 
-let ticks="";
+/* TICKS */
 
-if(m.sender===me._id) ticks="✔✔";
+let ticks = "";
 
-d.innerHTML=`
+if(m.sender === me._id){
+
+ticks = "✔✔";
+
+}
+
+/* MESSAGE HTML */
+
+d.innerHTML = `
 <div>${m.text}</div>
 <div class="meta">${time} ${ticks}</div>
 `;
 
 msgs.appendChild(d);
 
-msgs.scrollTop=msgs.scrollHeight;
+/* SCROLL */
+
+msgs.scrollTop = msgs.scrollHeight;
 
 }
 
-/* SEND */
+/* SEND MESSAGE */
 
 function send(e){
 
-e.preventDefault();
+if(e) e.preventDefault();
 
 if(!msgInput.value.trim()) return;
 
+if(!chatId) return;
+
 socket.emit("sendMessage",{
-chatId,
+chatId:chatId,
 sender:me._id,
 text:msgInput.value
 });
@@ -100,14 +144,16 @@ msgInput.value="";
 
 msgInput.addEventListener("input",()=>{
 
+if(!chatId) return;
+
 socket.emit("typing",{
-chatId,
+chatId:chatId,
 from:me._id
 });
 
 });
 
-/* RECEIVE */
+/* RECEIVE MESSAGE */
 
 socket.on("newMessage",m=>{
 
@@ -119,15 +165,15 @@ renderMsg(m);
 
 socket.on("typing",data=>{
 
-if(data.from===me._id) return;
+if(data.from === me._id) return;
 
-status.innerText="typing...";
+status.innerText = "typing...";
 
 clearTimeout(typingTimeout);
 
-typingTimeout=setTimeout(()=>{
+typingTimeout = setTimeout(()=>{
 
-status.innerText="online";
+status.innerText = "online";
 
 },1200);
 
@@ -137,9 +183,9 @@ status.innerText="online";
 
 socket.on("userStatus",data=>{
 
-if(data.userId!==other._id) return;
+if(data.userId !== other._id) return;
 
-status.innerText=data.online?"online":"offline";
+status.innerText = data.online ? "online" : "offline";
 
 });
 
@@ -148,10 +194,17 @@ status.innerText=data.online?"online":"offline";
 msgInput.addEventListener("focus",()=>{
 
 setTimeout(()=>{
-msgs.scrollTop=msgs.scrollHeight
-},300)
 
-})
+msgs.scrollTo({
+top:msgs.scrollHeight,
+behavior:"smooth"
+});
+
+},300);
+
+});
+
+/* BACK BUTTON */
 
 function goBack(){
 
