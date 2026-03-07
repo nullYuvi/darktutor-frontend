@@ -1,43 +1,27 @@
-const API = "https://darktutor-backend.onrender.com";
+const API="https://darktutor-backend.onrender.com";
 
-/* USER DATA */
+const me=JSON.parse(localStorage.user||"null");
 
-const token = localStorage.getItem("token");
-const me = JSON.parse(localStorage.getItem("user") || "null");
+if(!me) location.href="login.html";
 
-if (!token || !me) {
-  location.href = "login.html";
-}
+document.getElementById("myUsername").innerText=me.username;
 
-/* DOM */
-
-const onlineDiv = document.getElementById("onlineUsers");
-const allDiv = document.getElementById("allUsers");
-const search = document.getElementById("search");
-
-let users = [];
+const onlineUsers=document.getElementById("onlineUsers");
+const allUsers=document.getElementById("allUsers");
+const recentChats=document.getElementById("recentChats");
+const search=document.getElementById("search");
 
 /* LOAD USERS */
 
-async function loadUsers() {
+async function loadUsers(){
 
-  try {
+const r=await fetch(API+"/api/chat/users",{
+headers:{Authorization:localStorage.token}
+});
 
-    const res = await fetch(API + "/api/chat/users", {
-      headers: {
-        Authorization: token
-      }
-    });
+const users=await r.json();
 
-    users = await res.json();
-
-    renderUsers(users);
-
-  } catch (err) {
-
-    console.log("Users load error:", err);
-
-  }
+renderUsers(users);
 
 }
 
@@ -45,90 +29,90 @@ loadUsers();
 
 /* RENDER USERS */
 
-function renderUsers(list) {
+function renderUsers(users){
 
-  onlineDiv.innerHTML = "";
-  allDiv.innerHTML = "";
+onlineUsers.innerHTML="";
+allUsers.innerHTML="";
 
-  list.forEach(u => {
+users.forEach(u=>{
 
-    if (u._id === me._id) return;
+/* ONLINE */
 
-    const card = document.createElement("div");
+if(u.online){
 
-    card.className = "user";
+const d=document.createElement("div");
 
-    card.innerHTML = `
-      <img class="avatar"
-      src="${u.avatar || "https://i.imgur.com/1X6RZ4C.png"}">
+d.className="online-user";
 
-      <div class="name">${u.username}</div>
-    `;
+d.innerHTML=`
+<img src="${u.avatar}">
+<span>${u.username}</span>
+`;
 
-    card.onclick = () => openChat(u);
+d.onclick=()=>openChat(u);
 
-    if (u.online) {
-      onlineDiv.appendChild(card);
-    }
-
-    allDiv.appendChild(card);
-
-  });
+onlineUsers.appendChild(d);
 
 }
 
-/* OPEN CHAT */
+/* ALL USERS */
 
-async function openChat(user) {
+const d=document.createElement("div");
 
-  try {
+d.className="chat-item";
 
-    const res = await fetch(API + "/api/chat/private", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token
-      },
-      body: JSON.stringify({
-        userId: user._id
-      })
-    });
+d.innerHTML=`
 
-    const chat = await res.json();
+<img class="avatar" src="${u.avatar}">
 
-    localStorage.setItem("chatUser", JSON.stringify(user));
-    localStorage.setItem("chatId", chat._id);
+<div class="chat-info">
 
-    location.href = "chat.html";
+<div class="username">${u.username}</div>
+<div class="last-msg">Start conversation</div>
 
-  } catch (err) {
+</div>
 
-    console.log("Open chat error:", err);
+`;
 
-  }
+d.onclick=()=>openChat(u);
+
+allUsers.appendChild(d);
+
+});
 
 }
 
 /* SEARCH */
 
-search.addEventListener("input", () => {
+search.addEventListener("input",()=>{
 
-  const q = search.value.toLowerCase();
+const q=search.value.toLowerCase();
 
-  const filtered = users.filter(u =>
-    u.username.toLowerCase().includes(q)
-  );
+document.querySelectorAll(".chat-item").forEach(i=>{
 
-  renderUsers(filtered);
+i.style.display=i.innerText.toLowerCase().includes(q)
+?"flex":"none";
 
 });
 
+});
+
+/* OPEN CHAT */
+
+function openChat(user){
+
+localStorage.setItem("chatUser",JSON.stringify(user));
+
+location.href="chat.html";
+
+}
+
 /* LOGOUT */
 
-function logout() {
+function logout(){
 
-  localStorage.clear();
+localStorage.clear();
 
-  location.href = "login.html";
+location.href="login.html";
 
 }
