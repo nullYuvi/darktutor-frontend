@@ -18,6 +18,7 @@ const msgInput = document.getElementById("msg");
 const chatName = document.getElementById("chatName");
 const chatAvatar = document.getElementById("chatAvatar");
 const status = document.getElementById("status");
+const chat = document.querySelector(".chat");
 
 /* HEADER DATA */
 
@@ -50,9 +51,9 @@ Authorization:localStorage.token
 body:JSON.stringify({userId:other._id})
 });
 
-const chat = await r.json();
+const chatData = await r.json();
 
-chatId = chat._id;
+chatId = chatData._id;
 
 /* LOAD OLD MESSAGES */
 
@@ -63,8 +64,6 @@ headers:{Authorization:localStorage.token}
 const list = await m.json();
 
 list.forEach(renderMsg);
-
-/* AUTO SCROLL */
 
 msgs.scrollTop = msgs.scrollHeight;
 
@@ -81,6 +80,8 @@ init();
 /* RENDER MESSAGE */
 
 function renderMsg(m){
+
+if(!m) return;
 
 const d = document.createElement("div");
 
@@ -103,16 +104,13 @@ if(m.sender === me._id){
 ticks = "✔✔";
 }
 
-/* MESSAGE HTML */
+/* HTML */
 
 d.innerHTML = `
+
 <div>${m.text}</div>
 <div class="meta">${time} ${ticks}</div>
-`;
-
-msgs.appendChild(d);
-
-/* AUTO SCROLL */
+`;msgs.appendChild(d);
 
 msgs.scrollTop = msgs.scrollHeight;
 
@@ -126,8 +124,7 @@ if(e) e.preventDefault();
 
 const text = msgInput.value.trim();
 
-if(!text) return;
-if(!chatId) return;
+if(!text || !chatId) return;
 
 socket.emit("sendMessage",{
 chatId:chatId,
@@ -164,8 +161,7 @@ renderMsg(m);
 
 socket.on("typing",data=>{
 
-if(!data) return;
-if(data.from === me._id) return;
+if(!data || data.from === me._id) return;
 
 status.innerText = "typing...";
 
@@ -190,7 +186,7 @@ status.innerText = data.online ? "online" : "offline";
 
 });
 
-/* KEYBOARD FIX */
+/* KEYBOARD SCROLL FIX */
 
 msgInput.addEventListener("focus",()=>{
 
@@ -205,7 +201,7 @@ behavior:"smooth"
 
 });
 
-/* NEW MESSAGE KEYBOARD FIX */
+/* ENTER KEY SCROLL */
 
 msgInput.addEventListener("keydown",(e)=>{
 
@@ -229,13 +225,16 @@ history.back();
 
 function fixKeyboard(){
 
-if(!window.visualViewport) return;
-
-const chat = document.querySelector(".chat");
+if(!window.visualViewport || !chat) return;
 
 function updateHeight(){
 
 chat.style.height = window.visualViewport.height + "px";
+
+/* ensure bottom scroll */
+setTimeout(()=>{
+msgs.scrollTop = msgs.scrollHeight;
+},50);
 
 }
 
