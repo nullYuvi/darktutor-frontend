@@ -17,33 +17,44 @@ const typingDiv = document.getElementById("typing");
 const status = document.getElementById("status");
 
 chatName.innerText = other.username;
-chatAvatar.src = other.avatar || "https://i.imgur.com/1X6RZ4C.png";
+
+chatAvatar.src =
+other.avatar || "https://i.imgur.com/1X6RZ4C.png";
 
 socket.emit("userOnline", me._id);
 
 let chatId = null;
+let typingTimeout = null;
 
 async function init(){
 
 try{
 
 const r = await fetch(API + "/api/chat/private",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json",
 Authorization:localStorage.token
 },
+
 body:JSON.stringify({userId:other._id})
+
 });
 
 const chat = await r.json();
+
 chatId = chat._id;
 
 const m = await fetch(API + "/api/chat/messages/" + chatId,{
-headers:{Authorization:localStorage.token}
+
+headers:{ Authorization:localStorage.token }
+
 });
 
 const list = await m.json();
+
 list.forEach(renderMsg);
 
 }catch(err){
@@ -59,53 +70,124 @@ init();
 function renderMsg(m){
 
 const d = document.createElement("div");
-d.className = "msg " + (m.sender === me._id ? "self":"other");
+
+d.className = "msg " + (m.sender === me._id ? "self" : "other");
+
 d.dataset.id = m._id;
 
 const date = new Date(m.createdAt || Date.now());
-const time = date.getHours() + ":" + String(date.getMinutes()).padStart(2,"0");
+
+const time =
+date.getHours() +
+":" +
+String(date.getMinutes()).padStart(2,"0");
 
 let ticks = "";
 
 if(m.sender === me._id){
+
 ticks = "<span class="ticks ${m.status || "sent"}">✔✔</span>";
+
 }
 
 d.innerHTML = `
 
-<div class="sender">${m.sender === me._id ? "You" : other.username}</div>
-<div>${m.text}</div>
-<div class="meta">${time} ${ticks}</div>
+<div class="sender">
+${m.sender === me._id ? "You" : other.username}
+</div><div class="text">${m.text}</div><div class="meta">
+<span>${time}</span>
+${ticks}
+</div>
 `;msgs.appendChild(d);
+
 msgs.scrollTop = msgs.scrollHeight;
 
 }
 
 function send(e){
 
-e.preventDefault();
+if(e) e.preventDefault();
 
-if(!msgInput.value.trim()) return;
+if(!msgInput.value.trim() || !chatId) return;
 
 socket.emit("sendMessage",{
+
 chatId,
 sender:me._id,
 text:msgInput.value
+
 });
 
 msgInput.value="";
 
 }
 
+msgInput.addEventListener("input",()=>{
+
+if(!chatId) return;
+
+socket.emit("typing",{
+
+chatId,
+from:me._id
+
+});
+
+});
+
 socket.on("newMessage",m=>{
+
 renderMsg(m);
+
+if(m.sender !== me._id){
+
+setTimeout(()=>{
+socket.emit("seenMessage",m._id);
+},300);
+
+}
+
+});
+
+socket.on("messageStatus",data=>{
+
+const el = document.querySelector(
+"[data-id="${data.id}"] .ticks"
+);
+
+if(!el) return;
+
+el.className = "ticks " + data.status;
+
+});
+
+socket.on("typing",data=>{
+
+if(!typingDiv) return;
+
+if(data.from === me._id) return;
+
+typingDiv.innerText = "${other.username} is typing…";
+
+typingDiv.classList.add("show");
+
+clearTimeout(typingTimeout);
+
+typingTimeout = setTimeout(()=>{
+
+typingDiv.classList.remove("show");
+
+},1000);
+
 });
 
 socket.on("userStatus",data=>{
 
+if(!status) return;
+
 if(data.userId !== other._id) return;
 
-status.innerText = data.online ? "● online" : "offline";
+status.innerText = data.online ? "● online" : "last seen just now";
 
 });
 
