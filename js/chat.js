@@ -12,14 +12,16 @@ const msgInput=document.getElementById("msg");
 const chatName=document.getElementById("chatName");
 const chatAvatar=document.getElementById("chatAvatar");
 const status=document.getElementById("status");
-const typingDiv=document.getElementById("typing");
 
 chatName.innerText=other.username;
-chatAvatar.src=other.avatar||"https://i.imgur.com/1X6RZ4C.png";
 
-socket.emit("userOnline",me._id);
+chatAvatar.src=
+other.avatar||"https://i.imgur.com/1X6RZ4C.png";
 
 let chatId=null;
+let typingTimeout=null;
+
+socket.emit("userOnline",me._id);
 
 async function init(){
 
@@ -33,6 +35,7 @@ body:JSON.stringify({userId:other._id})
 });
 
 const chat=await r.json();
+
 chatId=chat._id;
 
 const m=await fetch(API+"/api/chat/messages/"+chatId,{
@@ -40,6 +43,7 @@ headers:{Authorization:localStorage.token}
 });
 
 const list=await m.json();
+
 list.forEach(renderMsg);
 
 }
@@ -53,13 +57,13 @@ const d=document.createElement("div");
 d.className="msg "+(m.sender===me._id?"self":"other");
 
 const date=new Date(m.createdAt||Date.now());
-const time=date.getHours()+":"+String(date.getMinutes()).padStart(2,"0");
+
+const time=date.getHours()+":"+
+String(date.getMinutes()).padStart(2,"0");
 
 let ticks="";
 
-if(m.sender===me._id){
-ticks="✔✔";
-}
+if(m.sender===me._id) ticks="✔✔";
 
 d.innerHTML=`
 <div>${m.text}</div>
@@ -98,18 +102,24 @@ from:me._id
 });
 
 socket.on("newMessage",m=>{
+
 renderMsg(m);
+
 });
 
 socket.on("typing",data=>{
 
 if(data.from===me._id) return;
 
-typingDiv.innerText=other.username+" is typing...";
+status.innerText="typing...";
 
-setTimeout(()=>{
-typingDiv.innerText="";
-},1000);
+clearTimeout(typingTimeout);
+
+typingTimeout=setTimeout(()=>{
+
+status.innerText="online";
+
+},1200);
 
 });
 
@@ -122,5 +132,7 @@ status.innerText=data.online?"online":"offline";
 });
 
 function goBack(){
+
 history.back();
+
 }
