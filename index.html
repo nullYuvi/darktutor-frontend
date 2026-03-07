@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
 <title>DarkTutor</title>
-<link rel="stylesheet" href="./css/index.css">
+
+<link rel="stylesheet" href="css/index.css">
+
 </head>
 
 <body>
 
-<header class="topbar">
-  <button class="logout" onclick="logout()">Logout</button>
-  <span class="title">DarkTutor</span>
+<div class="app">
+
+<header class="header">
+
+<div class="logo">DarkTutor</div>
+
+<input id="search"
+placeholder="Search users or chats">
+
 </header>
 
-<div class="searchBox">
-  <input id="search" placeholder="Search username...">
+<div id="chatList" class="chat-list"></div>
+
+<button class="new-chat" onclick="newChat()">+</button>
+
 </div>
 
-<div class="section">
-  <h4>🟢 Online Users</h4>
-  <div id="onlineUsers"></div>
-</div>
+<script src="js/index.js"></script>
 
-<div class="section">
-  <h4>👥 All Users</h4>
-  <div id="allUsers"></div>
-</div>
-
-<script src="./js/index.js"></script>
 </body>
+
 </html>
