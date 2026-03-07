@@ -50,6 +50,8 @@ list.forEach(renderMsg);
 
 init();
 
+/* RENDER MESSAGE */
+
 function renderMsg(m){
 
 const d=document.createElement("div");
@@ -76,6 +78,8 @@ msgs.scrollTop=msgs.scrollHeight;
 
 }
 
+/* SEND */
+
 function send(e){
 
 e.preventDefault();
@@ -92,6 +96,8 @@ msgInput.value="";
 
 }
 
+/* TYPING */
+
 msgInput.addEventListener("input",()=>{
 
 socket.emit("typing",{
@@ -101,11 +107,15 @@ from:me._id
 
 });
 
+/* RECEIVE */
+
 socket.on("newMessage",m=>{
 
 renderMsg(m);
 
 });
+
+/* TYPING HEADER */
 
 socket.on("typing",data=>{
 
@@ -123,6 +133,8 @@ status.innerText="online";
 
 });
 
+/* USER STATUS */
+
 socket.on("userStatus",data=>{
 
 if(data.userId!==other._id) return;
@@ -130,6 +142,16 @@ if(data.userId!==other._id) return;
 status.innerText=data.online?"online":"offline";
 
 });
+
+/* KEYBOARD FIX */
+
+msgInput.addEventListener("focus",()=>{
+
+setTimeout(()=>{
+msgs.scrollTop=msgs.scrollHeight
+},300)
+
+})
 
 function goBack(){
 
