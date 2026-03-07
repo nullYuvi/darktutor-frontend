@@ -224,3 +224,26 @@ msgs.scrollTop = msgs.scrollHeight;
 function goBack(){
 history.back();
 }
+
+/* ===== MOBILE KEYBOARD FIX (PRODUCTION) ===== */
+
+function fixKeyboard(){
+
+if(!window.visualViewport) return;
+
+const chat = document.querySelector(".chat");
+
+function updateHeight(){
+
+chat.style.height = window.visualViewport.height + "px";
+
+}
+
+window.visualViewport.addEventListener("resize", updateHeight);
+window.visualViewport.addEventListener("scroll", updateHeight);
+
+updateHeight();
+
+}
+
+fixKeyboard();
