@@ -83,11 +83,11 @@ opacity:.7;
 
 .messages{
 flex:1;
+
 overflow-y:auto;
 
 padding:16px;
-
-margin-bottom:80px; /* 👈 FIX */
+padding-bottom:110px; /* 👈 IMPORTANT */
 
 display:flex;
 flex-direction:column;
