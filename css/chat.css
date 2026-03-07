@@ -9,30 +9,37 @@ font-family:system-ui,Segoe UI;
 
 body{
 background:#050510;
-min-height:100vh;
+height:100vh;
 color:white;
-overflow:auto;
+overflow:hidden;
 }
 
-/* CHAT */
+/* CHAT CONTAINER */
 
 .chat{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
 display:flex;
 flex-direction:column;
-min-height:100vh;
-height:100%;
 }
 
 /* HEADER */
 
 .header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
 height:60px;
 display:flex;
 align-items:center;
 padding:0 14px;
 background:#0b0b1c;
 border-bottom:1px solid rgba(255,255,255,.07);
-flex-shrink:0;
+z-index:5;
 }
 
 .left{
@@ -71,7 +78,11 @@ opacity:.7;
 /* MESSAGE AREA */
 
 .messages{
-flex:1;
+position:absolute;
+top:60px;
+bottom:70px;
+left:0;
+right:0;
 overflow-y:auto;
 padding:16px;
 display:flex;
@@ -94,15 +105,11 @@ animation:msg .2s ease;
 position:relative;
 }
 
-/* SELF */
-
 .self{
 align-self:flex-end;
 background:linear-gradient(135deg,#00eaff,#0066ff);
 border-bottom-right-radius:6px;
 }
-
-/* OTHER */
 
 .other{
 align-self:flex-start;
@@ -124,7 +131,13 @@ gap:4px;
 /* INPUT AREA */
 
 .input-area{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:70px;
 display:flex;
+align-items:center;
 gap:10px;
 padding:10px;
 background:#0b0b1c;
