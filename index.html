@@ -4,9 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>DarkTutor</title>
 
@@ -16,39 +14,69 @@ content="width=device-width,initial-scale=1">
 
 <body>
 
-<header class="topbar">
+<div class="app">
 
-<span class="title">DarkTutor</span>
+<!-- HEADER -->
 
+<div class="header">
+
+<div class="left">
+
+<div class="logo">DarkTutor</div>
+<div id="myUsername" class="myname"></div>
+
+</div>
+
+<div class="right">
+
+<button class="profileBtn">👤</button>
 <button class="logout" onclick="logout()">Logout</button>
 
-</header>
+</div>
+
+</div>
+
+<!-- SEARCH -->
 
 <div class="searchBox">
 
-<input id="search"
-placeholder="Search username...">
+<input id="search" placeholder="Search users or chats">
 
 </div>
 
+<!-- ONLINE USERS -->
+
 <div class="section">
 
-<h4>🟢 Online Users</h4>
+<h3>🟢 Online Users</h3>
 
-<div id="onlineUsers"></div>
+<div id="onlineUsers" class="online-scroll"></div>
 
 </div>
 
+<!-- RECENT CHATS -->
+
 <div class="section">
 
-<h4>👥 All Users</h4>
+<h3>💬 Recent Chats</h3>
 
-<div id="allUsers"></div>
+<div id="recentChats" class="chat-list"></div>
+
+</div>
+
+<!-- ALL USERS -->
+
+<div class="section">
+
+<h3>👥 All Users</h3>
+
+<div id="allUsers" class="chat-list"></div>
+
+</div>
 
 </div>
 
 <script src="./js/index.js"></script>
 
 </body>
-
 </html>
