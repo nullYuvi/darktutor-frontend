@@ -9,9 +9,10 @@ font-family:system-ui,Segoe UI;
 
 body{
 background:#050510;
-height:100vh;
+height:100%;
+min-height:100vh;
 color:white;
-overflow:hidden;
+overflow:auto;
 }
 
 /* CHAT CONTAINER */
@@ -89,6 +90,7 @@ display:flex;
 flex-direction:column;
 gap:10px;
 scroll-behavior:smooth;
+-webkit-overflow-scrolling:touch;
 }
 
 /* MESSAGE */
@@ -153,7 +155,7 @@ border-radius:22px;
 border:none;
 background:#111;
 color:white;
-font-size:14px;
+font-size:16px;
 outline:none;
 }
 
