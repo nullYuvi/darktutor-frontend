@@ -3,8 +3,9 @@ const API = "https://darktutor-backend.onrender.com";
 /* USER DATA */
 
 const me = JSON.parse(localStorage.user || "null");
+const token = localStorage.token;
 
-if (!me) location.href = "login.html";
+if (!me || !token) location.href = "login.html";
 
 document.getElementById("myUsername").innerText = me.username;
 
@@ -35,7 +36,9 @@ async function loadUsers(){
 try{
 
 const r = await fetch(API + "/api/chat/users",{
-headers:{ Authorization: localStorage.token }
+headers:{
+Authorization: token
+}
 });
 
 const users = await r.json();
@@ -57,7 +60,9 @@ async function loadRecent(){
 try{
 
 const r = await fetch(API + "/api/chat/recent",{
-headers:{ Authorization: localStorage.token }
+headers:{
+Authorization: token
+}
 });
 
 const chats = await r.json();
