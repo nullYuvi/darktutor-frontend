@@ -2,8 +2,8 @@ const API = "https://darktutor-backend.onrender.com";
 
 /* USER DATA */
 
-const me = JSON.parse(localStorage.user || "null");
-const token = localStorage.token;
+const me = JSON.parse(localStorage.getItem("user") || "null");
+const token = localStorage.getItem("token");
 
 if (!me || !token) location.href = "login.html";
 
@@ -29,7 +29,7 @@ socket.emit("userOnline", me._id);
 loadUsers();
 loadRecent();
 
-/* USERS */
+/* ===== USERS ===== */
 
 async function loadUsers(){
 
@@ -37,9 +37,15 @@ try{
 
 const r = await fetch(API + "/api/chat/users",{
 headers:{
-Authorization: token
+"Content-Type":"application/json",
+"Authorization": token
 }
 });
+
+if(!r.ok){
+console.error("Users API error");
+return;
+}
 
 const users = await r.json();
 
@@ -47,13 +53,13 @@ renderUsers(users);
 
 }catch(err){
 
-console.error("Users load error",err);
+console.error("Users load error:",err);
 
 }
 
 }
 
-/* RECENT CHATS */
+/* ===== RECENT CHATS ===== */
 
 async function loadRecent(){
 
@@ -61,9 +67,15 @@ try{
 
 const r = await fetch(API + "/api/chat/recent",{
 headers:{
-Authorization: token
+"Content-Type":"application/json",
+"Authorization": token
 }
 });
+
+if(!r.ok){
+console.error("Recent API error");
+return;
+}
 
 const chats = await r.json();
 
@@ -72,7 +84,6 @@ recentChats.innerHTML = "";
 chats.forEach(c=>{
 
 const d = document.createElement("div");
-
 d.className = "chat-item";
 
 const time = new Date(c.time)
@@ -82,21 +93,14 @@ minute:"2-digit"
 });
 
 d.innerHTML = `
-
 <img class="avatar" src="${c.user.avatar}">
-
 <div class="chat-info">
-
 <div class="username">${c.user.username}</div>
-
 <div class="last-msg">
 ${c.lastMessage || "Start conversation"}
 </div>
-
 </div>
-
 <div class="time">${time}</div>
-
 `;
 
 d.onclick = ()=>openChat(c.user);
@@ -107,13 +111,13 @@ recentChats.appendChild(d);
 
 }catch(err){
 
-console.error("Recent chat error",err);
+console.error("Recent chat error:",err);
 
 }
 
 }
 
-/* RENDER USERS */
+/* ===== RENDER USERS ===== */
 
 function renderUsers(users){
 
@@ -148,16 +152,11 @@ const d = document.createElement("div");
 d.className = "chat-item";
 
 d.innerHTML = `
-
 <img class="avatar" src="${u.avatar}">
-
 <div class="chat-info">
-
 <div class="username">${u.username}</div>
 <div class="last-msg">Start conversation</div>
-
 </div>
-
 `;
 
 d.onclick = ()=>openChat(u);
@@ -168,7 +167,7 @@ allUsers.appendChild(d);
 
 }
 
-/* SEARCH */
+/* ===== SEARCH ===== */
 
 search.addEventListener("input",()=>{
 
@@ -185,7 +184,7 @@ i.innerText.toLowerCase().includes(q)
 
 });
 
-/* OPEN CHAT */
+/* ===== OPEN CHAT ===== */
 
 function openChat(user){
 
@@ -195,7 +194,7 @@ location.href = "chat.html";
 
 }
 
-/* LOGOUT */
+/* ===== LOGOUT ===== */
 
 function logout(){
 
@@ -205,7 +204,7 @@ location.href = "login.html";
 
 }
 
-/* REALTIME UPDATE */
+/* ===== REALTIME RECENT UPDATE ===== */
 
 socket.on("recentUpdate",()=>{
 
@@ -213,7 +212,7 @@ loadRecent();
 
 });
 
-/* ONLINE STATUS UPDATE */
+/* ===== ONLINE STATUS UPDATE ===== */
 
 socket.on("userStatus",()=>{
 
